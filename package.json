@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently -n API,WEB -c auto \"pnpm -C apps/api dev\" \"pnpm -C apps/web dev\"",
+    "dev": "concurrently -n API,WEB -c auto --kill-others \"pnpm -C apps/api dev\" \"pnpm -C apps/web dev\"",
     "dev:api": "pnpm -C apps/api dev",
     "dev:web": "pnpm -C apps/web dev"
   },
