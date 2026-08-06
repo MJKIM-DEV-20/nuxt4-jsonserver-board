@@ -24,13 +24,13 @@ export const routers = createBrowserRouter([
                 ),
             },
             {
-                path: 'posts/edit/:id',
+                path: '/posts/:id/edit',
                 element: (
                  <PostEdit/>
                 ),
             },
             {
-                path: 'posts/write',
+                path: '/write',
                 element: (
                     <PostForm/>
                 ),

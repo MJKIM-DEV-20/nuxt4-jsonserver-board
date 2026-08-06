@@ -1,14 +1,17 @@
 import { InputText } from 'primereact/inputtext'
-import {Link} from "react-router-dom";
+import { NavLink}  from "react-router-dom";
 
 
 export default function AppHeader() {
   return (
     <header className="site-header">
       <div className="shell header-inner">
+
         <div className="logo">
+          <NavLink to="/">
           <span className="logo-mark" aria-hidden="true">M</span>
           <span className="logo-copy"><strong>개발 미션 게시판</strong></span>
+          </NavLink>
         </div>
 
         <div className="header-actions">
@@ -21,10 +24,12 @@ export default function AppHeader() {
               readOnly
             />
           </div>
+          {/*<NavLink to="/about">*/}
           <span className="p-button header-write is-static">
             <i className="pi pi-plus" aria-hidden="true" />
             <span>글쓰기</span>
           </span>
+          {/*</NavLink>*/}
         </div>
       </div>
     </header>

@@ -7,12 +7,12 @@ import {routers} from "./router/router.jsx";
 import 'primereact/resources/themes/lara-light-blue/theme.css'
 import 'primeicons/primeicons.css'
 import './styles.css'
-
+import { BrowserRouter} from "react-router-dom";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <PrimeReactProvider>
         <RouterProvider router={routers} />
-    <App/>
+         <App/>
     </PrimeReactProvider>
   </StrictMode>,
 )

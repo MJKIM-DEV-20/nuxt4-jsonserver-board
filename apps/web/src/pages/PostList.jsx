@@ -1,9 +1,19 @@
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
+import {useState,useEffect} from "react";
+import axios from "axios";
+
 export default function PostList() {
+  const [boardList, setBoardList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(10); // Number of posts per page, default: 5
+  const [totalPages, setTotalPages] = useState(1); // Total number of pages
 
-
-
-
-
+  fetch(`http://localhost:4100/posts?_page=1&_per_page=10`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      });
 
 
 
