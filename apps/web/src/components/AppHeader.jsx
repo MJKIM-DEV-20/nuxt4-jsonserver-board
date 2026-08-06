@@ -24,12 +24,12 @@ export default function AppHeader() {
               readOnly
             />
           </div>
-          {/*<NavLink to="/about">*/}
+          <NavLink to="/write">
           <span className="p-button header-write is-static">
             <i className="pi pi-plus" aria-hidden="true" />
             <span>글쓰기</span>
           </span>
-          {/*</NavLink>*/}
+          </NavLink>
         </div>
       </div>
     </header>
