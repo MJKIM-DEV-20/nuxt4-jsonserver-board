@@ -1,10 +1,17 @@
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
 
 export default function PostDetail() {
+  const { id } = useParams();
+  console.log(id);
+
   return (
     <>
+      <h1>{id}</h1>
       <span className="back-link is-static">
         <i className="pi pi-chevron-left" aria-hidden="true" />
         전체 글로
