@@ -4,33 +4,38 @@ import PostDetail from  '../pages/PostDetail';
 import PostForm from '../pages/PostForm';
 import PostList from '../pages/PostList';
 import PostEdit from '../pages/PostEdit';
-import AppHeader from  '../components/AppHeader';
-import React from 'react';
-import {
-    createBrowserRouter,
-    createRoutesFromElements,
-    RouterProvider,
-    Route,
-} from 'react-router-dom';
-// @ts-ignore
-export const router  =  {
-    element: <AppHeader/>,
-    children: [
-                {
-                    path: "posts",
-                    element: <PostList/>
-                },
-                {
-                    path: `posts/:id`,
-                    element: <PostDetail/>
-                },
-                {
-                    path: "posts/edit",
-                    element: <PostForm/>
-                },
-                {
-                    path: "write",
-                    element: <PostEdit />                }
-            ]
+import  DefaultLayout from '../components/layout.jsx';
+import {createBrowserRouter} from "react-router";
 
-                }
+export const routers = createBrowserRouter([
+    {
+        element: <DefaultLayout />,
+        children: [
+            {
+                index: true,
+                element: (
+                    <PostList/>
+                ),
+            },
+            {
+                path: 'posts:/id',
+                element: (
+                    <PostDetail/>
+                ),
+            },
+            {
+                path: 'posts/edit/:id',
+                element: (
+                 <PostEdit/>
+                ),
+            },
+            {
+                path: 'posts/write',
+                element: (
+                    <PostForm/>
+                ),
+            },
+        ],
+    }
+])
+

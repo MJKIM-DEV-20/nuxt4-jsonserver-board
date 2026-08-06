@@ -1,4 +1,12 @@
 export default function PostList() {
+
+
+
+
+
+
+
+
   return (
     <>
       <section className="page-intro" aria-labelledby="board-title">
