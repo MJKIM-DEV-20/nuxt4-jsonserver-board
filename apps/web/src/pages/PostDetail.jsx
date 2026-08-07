@@ -16,8 +16,6 @@ export default function PostDetail() {
         console.log(data)
       });
 
-
-
   return (
     <>
       <h1>{id}</h1>

@@ -4,6 +4,10 @@ import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
 
 export default function PostForm() {
+
+
+
+
   return (
     <>
       <span className="back-link is-static">

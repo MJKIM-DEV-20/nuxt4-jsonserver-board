@@ -6,12 +6,8 @@ import {useState,useEffect,useCallback} from "react";
 
 
 export default function PostEdit() {
-
-
-
-
-
-
+    [edit,SetEdit] = useState([])
+    [contents,SetContents] = useState("")
 
     return (
         <>
