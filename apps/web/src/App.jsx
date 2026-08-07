@@ -25,7 +25,7 @@ export default function App() {
                 <Route path="/" element={<PostList />} />
                 <Route path="/posts/:id/edit" element={<PostEdit />} />
                 <Route path="/write" element={<PostForm />} />
-                <Route path="Posts/edit/:id" element={<PostEdit />} />
+                <Route path="Posts/:id" element={<PostDetail />} />
         </Routes>
     </>
   )

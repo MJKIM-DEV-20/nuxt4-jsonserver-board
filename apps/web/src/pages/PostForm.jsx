@@ -2,9 +2,44 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
+import React from "react";
+import {useRef} from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function PostForm() {
+  const navigate = useNavigate();
+  const titleRef = useRef("")
+  const nicknameRef = useRef("")
+  const contentRef = useRef("")
 
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    fetch(`http://localhost:4100/posts`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id:11,
+        title: titleRef.current.value,
+        author: nicknameRef.current.value,
+        content: contentRef.current.value,
+      }),
+    }).then(res => {
+      if (res.ok) {
+        alert('생성이 완료됐습니다.')
+      }
+      else{
+        console.log("error")
+      }
+    })
+
+    navigate('/', { replace: true });
+    console.log(titleRef.current.value)
+    console.log(titleRef.current.value)
+    console.log(contentRef.current.value)
+  }
 
 
 
@@ -33,6 +68,7 @@ export default function PostForm() {
               id="title"
               placeholder="예: 페이지네이션 쿼리는 어떻게 넘기시나요?"
               aria-describedby="title-count"
+              ref={titleRef}
             />
             <div className="field-foot">
               <span className="field-hint" id="title-count">0 / 100자</span>
@@ -48,6 +84,7 @@ export default function PostForm() {
               id="author"
               placeholder="목록에 표시될 이름"
               aria-describedby="author-count"
+              ref={nicknameRef}
             />
             <div className="field-foot">
               <span className="field-hint" id="author-count">0 / 20자</span>
@@ -64,6 +101,7 @@ export default function PostForm() {
               rows={12}
               placeholder="막힌 부분, 시도해본 방법, 궁금한 점을 차례로 적어보세요"
               aria-describedby="content-count"
+              ref={contentRef}
             />
             <div className="field-foot">
               <span className="field-hint" id="content-count">0 / 2,000자</span>
@@ -72,7 +110,7 @@ export default function PostForm() {
 
           <div className="form-footer">
             <span className="p-button p-button-help btn-xl is-static">작성 취소</span>
-            <Button type="button" label="글 등록" className="btn-xl" icon="pi pi-check" disabled />
+            <Button type="button" label="글 등록" className="btn-xl" icon="pi pi-check" onClick={handleSubmit}/>
           </div>
         </form>
 
@@ -94,7 +132,7 @@ export default function PostForm() {
         draggable={false}
         footer={(
           <>
-            <Button type="button" label="계속 작성" severity="help" />
+            <Button type="button" label="계속 작성" severity="help" onClick={handleSubmit}/>
             <Button type="button" label="내용 버리고 나가기" severity="danger" />
           </>
         )}

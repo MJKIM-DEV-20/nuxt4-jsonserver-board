@@ -2,26 +2,19 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, NavLink } from "react-router-dom";
 
 
 
 export default function PostDetail() {
-  const { id } = useParams();
-  console.log(id);
-
-  fetch(`http://localhost:4100/posts?_page=1&_per_page=10`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-      });
-
+  const { id } = useParams()
   return (
     <>
-      <h1>{id}</h1>
       <span className="back-link is-static">
+        <NavLink to ={'/'}>
         <i className="pi pi-chevron-left" aria-hidden="true" />
         전체 글로
+          </NavLink>
       </span>
 
       <article className="card article-card">
