@@ -2,7 +2,6 @@ import { Link, NavLink, useSearchParams } from "react-router-dom";
 import { data, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getList } from "../api/api.js";
 import PostListSkeleton from "../components/ContentState.jsx";
 
 export function PostList() {
@@ -16,9 +15,35 @@ export function PostList() {
 
   const totalPages = Math.ceil(totalCount / postPerPage);
 
-  async function getList(page, limit) {
+  const query = searchParams.get("query") || "";
+  const notice = searchParams.get("notice") || "all";
+  const sort = searchParams.get("sort") || "latest";
+
+  async function getList(page, limit, query, notice, sort) {
+    const params = new URLSearchParams();
+
+    if (query) {
+      params.set("q", query);
+    }
+    if (notice !== "all") {
+      params.set("notice", notice);
+    }
+
+    if (sort === "views") {
+      params.set("_sort", "views");
+      params.set("_order", "desc");
+    } else {
+      params.set("_sort", "createdAt");
+      params.set("_order", "desc");
+    }
+
+    params.set("_page", String(page));
+    params.set("_per_page", String(limit));
+
+    // 페이지네이션
+
     const response = await fetch(
-      `http://localhost:4100/posts?_page=${page}&_per_page=${limit}`,
+      `http://localhost:4100/posts?${params.toString()}`,
       {
         method: "GET",
       },
@@ -29,28 +54,42 @@ export function PostList() {
 
   useEffect(() => {
     async function getLists() {
+      setLoading(true);
+
       try {
-        const resp = await getList(currentPage, postPerPage);
+        const resp = await getList(
+          currentPage,
+          postPerPage,
+          query,
+          notice,
+          sort,
+        );
+
+        console.log("query:", query);
+        console.log("resp:", resp);
+        console.log("검색 결과:", resp.data);
+
         setBoardList(resp.data);
+        setTotalCount(resp.items);
       } finally {
         setLoading(false);
       }
     }
 
     getLists();
-  }, [currentPage, postPerPage]);
+  }, [currentPage, postPerPage, query, notice, sort]);
 
-  //전체 데이터 길이
-  useEffect(() => {
-    async function getCounts() {
-      const res = await fetch("http://localhost:4100/posts");
-      const all = await res.json();
-      setTotalCount(all.length);
-      console.log(all.length);
-    }
+  // //전체 데이터 길이
+  // useEffect(() => {
+  //   async function getCounts() {
+  //     const res = await fetch("http://localhost:4100/posts");
+  //     const all = await res.json();
+  //     setTotalCount(all.length);
+  //     console.log(all.length);
+  //   }
 
-    getCounts();
-  }, []);
+  //   getCounts();
+  // }, []);
 
   const handlePagination = (pageNumber) => {
     console.log(pageNumber);
@@ -58,9 +97,37 @@ export function PostList() {
     console.log(totalCount);
     if (pageNumber < 1 || pageNumber > totalPages) return;
 
+    // setSearchParams({
+    //   _page: String(pageNumber),
+    //   _limit: String(postPerPage),
+    // });
+
     setSearchParams({
+      query,
+      notice,
+      sort,
       _page: String(pageNumber),
       _limit: String(postPerPage),
+    });
+  };
+
+  const noticeTab = (value) => {
+    setSearchParams({
+      query,
+      notice: value,
+      sort,
+      _page: 1,
+      _limit: postPerPage,
+    });
+  };
+
+  const handlesort = (value) => {
+    setSearchParams({
+      query,
+      notice,
+      sort: value,
+      _page: 1,
+      _limit: postPerPage,
     });
   };
 
@@ -74,6 +141,40 @@ export function PostList() {
           <p className="page-description">
             미션을 진행하며 생긴 질문과 해결한 방법을 나눠보세요.
           </p>
+        </div>
+      </section>
+
+      <section className="board-panel" aria-label="게시글 목록">
+        <div className="board-toolbar">
+          <div className="tabs" role="group" aria-label="게시글 필터">
+            <button
+              type="button"
+              onClick={() => noticeTab("all")}
+              className="tab is-active"
+              aria-pressed="true"
+            >
+              전체
+            </button>
+            <button
+              type="button"
+              onClick={() => noticeTab("true")}
+              className="tab"
+              aria-pressed="false"
+            >
+              공지
+            </button>
+          </div>
+          <div className="toolbar-meta">
+            <p className="result-count">{totalCount}개의 글</p>
+            <label className="sort-control">
+              <span className="sr-only">게시글 정렬</span>
+              <select value={sort} onChange={(e) => handlesort(e.target.value)}>
+                <option value="latest">최신순</option>
+                <option value="views">조회순</option>
+              </select>
+              <i className="pi pi-chevron-down" aria-hidden="true" />
+            </label>
+          </div>
         </div>
       </section>
 
