@@ -1,8 +1,28 @@
 import { InputText } from 'primereact/inputtext'
 import { NavLink}  from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
+import {useState} from "react";
 
 
 export default function AppHeader() {
+  // const [keywords, setKeywords] = useState([]);
+  //const [keyword, setKeyword] = useState('');
+  //const [search, setSearch] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState(searchParams.get('q') ?? '');
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchParams({ page: '1', q: searchInput });
+  };
+
+  const handleResetSearch = () => {
+    setSearchInput('');
+    setSearchParams({ page: '1' });
+  };
+
+
+
   return (
     <header className="site-header">
       <div className="shell header-inner">
@@ -21,7 +41,7 @@ export default function AppHeader() {
               type="search"
               placeholder="질문이나 해결 방법 검색"
               aria-label="게시글 검색"
-              readOnly
+              onClick={handleSearch}
             />
           </div>
           <NavLink to="/write">

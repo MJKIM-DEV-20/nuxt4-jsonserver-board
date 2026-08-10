@@ -7,7 +7,31 @@ import { Link, useParams, NavLink } from "react-router-dom";
 
 
 export default function PostDetail() {
-  const { id } = useParams()
+  const { id } = useParams(); //
+  const [loading, setLoading] = useState(true);
+  const [board, setBoard] = useState([]);
+  const [visible,setVisible] = useState(false);
+
+  const getBoardDetail = async () => {
+    const resp = await fetch(`http://localhost:4100/posts/${id}`,
+        {
+          method: 'GET',
+        });
+    const data = await resp.json();
+    setBoard(data);
+    console.log(data);
+    setLoading(false);
+  };
+
+
+  const deleteBoard = async (id) => {
+    const res = await fetch(`http://localhost:4100/posts/${id}`, {
+        method: 'DELETE',
+      });
+      return res.ok;
+  }
+
+
   return (
     <>
       <span className="back-link is-static">
@@ -16,15 +40,16 @@ export default function PostDetail() {
         전체 글로
           </NavLink>
       </span>
-
+      {board?.map((item, index) => (
       <article className="card article-card">
-        <h1 className="page-title article-title">게시판 미션 진행 중 막히는 부분 공유합니다</h1>
+
+      <h1 className="page-title article-title">{board?.title}</h1>
 
         <div className="post-head">
           <div className="author">
             <span className="author-face" aria-hidden="true">작</span>
             <div>
-              <div className="author-name">작성자1</div>
+              <div className="author-name">{board?.author}</div>
               <div className="author-date">2026년 8월 10일 09:02</div>
             </div>
           </div>
@@ -62,12 +87,12 @@ export default function PostDetail() {
           </span>
         </div>
       </article>
-
+      ))}
       <section className="card comments-card">
         <div className="section-heading">
           <div>
-            <h2 className="section-title">댓글 2개</h2>
-            <p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>
+            {/*<h2 className="section-title">댓글 2개</h2>*/}
+            {/*<p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>*/}
           </div>
         </div>
 

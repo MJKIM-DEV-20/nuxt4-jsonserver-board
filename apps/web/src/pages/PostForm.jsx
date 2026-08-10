@@ -2,16 +2,17 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import React from "react";
+import React, {useState} from "react";
 import {useRef} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 export default function PostForm() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const titleRef = useRef("")
   const nicknameRef = useRef("")
   const contentRef = useRef("")
-
+  const [isEdit, setEdit] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -21,7 +22,7 @@ export default function PostForm() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        id:11,
+        id:id,
         title: titleRef.current.value,
         author: nicknameRef.current.value,
         content: contentRef.current.value,

@@ -2,12 +2,48 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import {useState,useEffect,useCallback} from "react";
+import React, {useState, useEffect, useCallback, useRef} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 export default function PostEdit() {
-    [edit,SetEdit] = useState([])
-    [contents,SetContents] = useState("")
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const titleRef = useRef("")
+    const nicknameRef = useRef("")
+    const contentRef = useRef("")
+    const [isEdit, setEdit] = useState(false);
+    const [contents,SetContents] = useState("")
+    const [visible, setVisible] = useState(false);
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        fetch(`http://localhost:4100/posts/${id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: titleRef.current.value,
+                author: nicknameRef.current.value,
+                content: contentRef.current.value,
+            }),
+        }).then(res => {
+            if (res.ok) {
+                alert('생성이 완료됐습니다.')
+            }
+            else{
+                console.log("error")
+            }
+        })
+
+        navigate('/', { replace: true });
+        console.log(titleRef.current.value)
+        console.log(titleRef.current.value)
+        console.log(contentRef.current.value)
+    }
+
 
     return (
         <>
@@ -18,7 +54,7 @@ export default function PostEdit() {
 
             <section className="page-intro page-intro--compact">
                 <div>
-                    <h1 className="page-title">새 글 작성</h1>
+                    <h1 className="page-title">글 수정하기</h1>
                     <p className="page-description">질문이나 해결 방법을 작성하면 목록에 바로 보여요.</p>
                 </div>
             </section>
@@ -34,6 +70,7 @@ export default function PostEdit() {
                             id="title"
                             placeholder="예: 페이지네이션 쿼리는 어떻게 넘기시나요?"
                             aria-describedby="title-count"
+                            ref={titleRef}
                         />
                         <div className="field-foot">
                             <span className="field-hint" id="title-count">0 / 100자</span>
@@ -49,6 +86,7 @@ export default function PostEdit() {
                             id="author"
                             placeholder="목록에 표시될 이름"
                             aria-describedby="author-count"
+                            ref={nicknameRef}
                         />
                         <div className="field-foot">
                             <span className="field-hint" id="author-count">0 / 20자</span>
@@ -65,6 +103,7 @@ export default function PostEdit() {
                             rows={12}
                             placeholder="막힌 부분, 시도해본 방법, 궁금한 점을 차례로 적어보세요"
                             aria-describedby="content-count"
+                            ref={contentRef}
                         />
                         <div className="field-foot">
                             <span className="field-hint" id="content-count">0 / 2,000자</span>
@@ -72,8 +111,8 @@ export default function PostEdit() {
                     </div>
 
                     <div className="form-footer">
-                        <span className="p-button p-button-help btn-xl is-static">작성 취소</span>
-                        <Button type="button" label="글 등록" className="btn-xl" icon="pi pi-check" disabled />
+                        <span className="p-button p-button-help btn-xl is-static" onClick={()=>setVisible(true)}>작성 취소</span>
+                        <Button type="button" label="글 등록" className="btn-xl" icon="pi pi-check" onClick={handleSubmit}/>
                     </div>
                 </form>
 
@@ -90,16 +129,16 @@ export default function PostEdit() {
 
             {/* 퍼블리싱된 이탈 확인 UI. visible 상태와 이벤트는 인턴이 구현한다. */}
             <Dialog
-                visible={false}
+                visible={visible} onHide={() => setVisible(false)}
+                breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}
                 header="작성을 그만둘까요?"
                 draggable={false}
                 footer={(
                     <>
-                        <Button type="button" label="계속 작성" severity="help" />
-                        <Button type="button" label="내용 버리고 나가기" severity="danger" />
+                        <Button type="button" label="계속 작성" severity="help" onClick={() => setVisible(false)}/>
+                        <Button type="button" label="내용 버리고 나가기" severity="danger" onClick={() => navigate('/')}/>
                     </>
-                )}
-            >
+                )}>
                 지금 나가면 입력한 내용이 사라져요.
             </Dialog>
         </>

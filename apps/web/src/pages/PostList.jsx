@@ -14,7 +14,7 @@ export function PostList() {
   const searchParams = new URLSearchParams();
   const page = searchParams.get('page');
   const limit = 10;
-
+  const [totalCount, setTotalCount] = useState(0);
 
   async function getList () {
     const response = await fetch(`http://localhost:4100/posts`,
@@ -56,7 +56,7 @@ export function PostList() {
           <section className="board-panel" aria-label="게시글 목록">
             {boardList?.map((list, index) => (
                 <NavLink to ={`/posts/${list.id}`}>
-            <li className="post-item">
+            <li className="post-item" key={list.index}>
               <div key = {list.id} className="post-item-body">
                 <div className="post-item-head">
                   <h2 className="post-item-title"><span>{list?.title}</span></h2>

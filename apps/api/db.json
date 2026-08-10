@@ -1,80 +1,94 @@
 {
   "posts": [
     {
-      "id": 1,
+      "id": "1",
+      "author": "테스트 작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 2,
+      "id": "2",
+      "author": "테스트 수정수정수정",
+      "title": "수정수정수정",
+      "content": "ㅏㅣ마ㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏ\n\n1. 테스트\n2.테스트\n3. 테스트"
+    },
+    {
+      "id": "3",
+      "author": "게시글 3 닉네임",
+      "title": "테스트(게시글 3 수정)",
+      "content": "## 게시글 3 ##\n\n# 게시글 3\n# 게시글 3\n## 게시글 3"
+    },
+    {
+      "id": "4",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 3,
+      "id": "5",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 4,
+      "id": "6",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 5,
+      "id": "7",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 6,
+      "id": "8",
+      "author": "가나디",
+      "title": "게시판 제목",
+      "content": "게시물 내용"
+    },
+    {
+      "id": "9",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 7,
+      "id": "10",
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용"
     },
     {
-      "id": 8,
-      "title": "게시판 제목",
-      "content": "게시물 내용"
-    },
-    {
-      "id": 9,
-      "author": "작성자",
-      "title": "게시판 제목",
-      "content": "게시물 내용"
-    },
-    {
-      "id": 10,
-      "author": "작성자",
-      "title": "게시판 제목",
-      "content": "게시물 내용"
-    },
-    {
-      "id": 11,
+      "id": "11",
       "title": "dcddd",
       "author": "ddddd",
       "content": "dddddddddddddddddd"
     },
     {
-      "id": 11,
+      "id": "12",
       "title": "dddd",
       "author": "ddddddddddd",
       "content": "dddddddddddddddddddddddd"
     },
     {
-      "id": 11,
+      "id": "13",
       "title": "테스트입니다",
       "author": "잠만보",
       "content": "ㅇㅇㅇㅇㅇㅇㅇ"
+    },
+    {
+      "id": 14,
+      "title": "페이지네이션",
+      "author": "nick named",
+      "content": "dddddddddddddddd"
+    },
+    {
+      "id": 15,
+      "title": "",
+      "author": "",
+      "content": ""
     }
   ],
   "comments": []

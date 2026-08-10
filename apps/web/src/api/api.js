@@ -40,4 +40,10 @@ export async function getList() {
 //
 //
 //     }
-
+//
+// export async function deleteItem(id) {
+//     const res = await fetch(`http://localhost:4100/posts/:id`, {
+//         method: 'DELETE',
+//     });
+//     return res.ok;
+// }
