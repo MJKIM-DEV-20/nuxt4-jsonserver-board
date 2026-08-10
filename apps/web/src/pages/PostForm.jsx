@@ -14,6 +14,9 @@ export default function PostForm() {
   const contentRef = useRef("")
   const [isEdit, setEdit] = useState(false);
 
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault()
     fetch(`http://localhost:4100/posts`, {

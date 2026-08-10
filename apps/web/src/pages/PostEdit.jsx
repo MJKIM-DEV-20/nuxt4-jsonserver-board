@@ -9,11 +9,13 @@ import {useNavigate, useParams} from "react-router-dom";
 export default function PostEdit() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [title, setTitle] = useState("")
+    const [nickname, setNickname] = useState("")
+    const [contents,SetContents] = useState("")
     const titleRef = useRef("")
     const nicknameRef = useRef("")
     const contentRef = useRef("")
     const [isEdit, setEdit] = useState(false);
-    const [contents,SetContents] = useState("")
     const [visible, setVisible] = useState(false);
 
 

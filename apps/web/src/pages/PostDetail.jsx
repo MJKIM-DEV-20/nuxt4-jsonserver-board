@@ -2,15 +2,17 @@ import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { useEffect, useState } from "react";
-import { Link, useParams, NavLink } from "react-router-dom";
+import {Link, useParams, NavLink, useNavigate} from "react-router-dom";
 
 
 
 export default function PostDetail() {
   const { id } = useParams(); //
   const [loading, setLoading] = useState(true);
-  const [board, setBoard] = useState([]);
+  const [board, setBoard] = useState({});
   const [visible,setVisible] = useState(false);
+  const navigate = useNavigate();
+
 
   const getBoardDetail = async () => {
     const resp = await fetch(`http://localhost:4100/posts/${id}`,
@@ -22,6 +24,28 @@ export default function PostDetail() {
     console.log(data);
     setLoading(false);
   };
+
+  console.log(board);
+
+
+   //useEffect(() => {
+   //  getBoardDetail().then(() => setBoard());
+   //}, [getBoardDetail()]);
+
+  useEffect(() => {
+    const getBoardDetail = async () => {
+      const resp = await fetch(`http://localhost:4100/posts/${id}`,
+          {
+            method: 'GET',
+          });
+      const data = await resp.json();
+      setBoard(data);
+      console.log(data);
+      setLoading(false);
+    };
+
+    getBoardDetail();
+  }, []);
 
 
   const deleteBoard = async (id) => {
@@ -40,10 +64,10 @@ export default function PostDetail() {
         전체 글로
           </NavLink>
       </span>
-      {board?.map((item, index) => (
-      <article className="card article-card">
+      {/*{ board?.map((item, index) => (*/}
+      <article className="card article-card" >
 
-      <h1 className="page-title article-title">{board?.title}</h1>
+      <h1 className="page-title article-title">{board && board?.title}</h1>
 
         <div className="post-head">
           <div className="author">
@@ -68,26 +92,18 @@ export default function PostDetail() {
         <hr className="rule" />
 
         <div className="post-body">
-          목록 조회는 됐는데 페이지네이션에서 전체 건수를 어디서 받아야 하는지 헷갈렸습니다.
-          {'\n'}
-          정리한 내용을 공유합니다.
-          {'\n\n'}
-          1. 목록은 페이지당 10개씩 보여줍니다.
-          {'\n'}
-          2. 상세로 들어가면 제목, 작성자, 작성일, 본문이 보입니다.
-          {'\n'}
-          3. 작성 / 수정 / 삭제는 같은 폼을 재사용합니다.
+          {board?.content}
         </div>
 
         <div className="post-actions">
-          <Button type="button" label="글 삭제" severity="danger" icon="pi pi-trash" className="is-static" />
-          <span className="p-button p-button-secondary is-static">
+          <Button type="button" label="글 삭제" severity="danger" icon="pi pi-trash" className="is-static" onClick={()=>setVisible(true)}/>
+          <span className="p-button p-button-secondary is-static" onClick={() => navigate(`/posts/${id}/edit`)}>
             <i className="pi pi-pencil" aria-hidden="true" />
             <span>글 수정</span>
           </span>
         </div>
       </article>
-      ))}
+      {/*))}*/}
       <section className="card comments-card">
         <div className="section-heading">
           <div>
@@ -127,7 +143,7 @@ export default function PostDetail() {
             placeholder="해결 방법이나 참고 자료를 알려주세요"
           />
           <div className="row-end">
-            <Button type="button" label="댓글 등록" disabled />
+            <Button type="button" label="댓글 등록"  />
           </div>
         </form>
       </section>

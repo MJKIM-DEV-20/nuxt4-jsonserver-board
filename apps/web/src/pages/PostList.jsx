@@ -3,14 +3,14 @@ import {data, useNavigate} from "react-router";
 import {useState,useEffect} from "react";
 import axios from "axios";
 import {getList} from "../api/api.js";
-
+import PostListSkeleton from "../components/ContentState.jsx";
 
 export function PostList() {
   const [boardList, setBoardList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10); // Number of posts per page, default: 5
   const [totalPages, setTotalPages] = useState(1); // Total number of pages
-  const [loading, setLoading] = useState(true);
+  const [isloading, setLoading] = useState(true);
   const searchParams = new URLSearchParams();
   const page = searchParams.get('page');
   const limit = 10;
@@ -41,7 +41,9 @@ export function PostList() {
         .finally(() => setLoading(false));
   }, []);
 
-
+  // useEffect(() => {
+  //   getList().then((boardList) => setBoardList());
+  // }, [getList]);
 
   return (
       <>
@@ -53,10 +55,13 @@ export function PostList() {
           </p>
         </div>
       </section>
+        {isloading ? (
+                <PostListSkeleton/>
+            ) :
           <section className="board-panel" aria-label="게시글 목록">
             {boardList?.map((list, index) => (
-                <NavLink to ={`/posts/${list.id}`}>
-            <li className="post-item" key={list.index}>
+                <NavLink to ={`/posts/${list.id}`} key={index}>
+            <li className="post-item" >
               <div key = {list.id} className="post-item-body">
                 <div className="post-item-head">
                   <h2 className="post-item-title"><span>{list?.title}</span></h2>
@@ -80,19 +85,18 @@ export function PostList() {
                 </NavLink>
               ))}
     </section>
+}
     <div className="pager" aria-label="페이지 이동 UI">
       <div>
         <button
             onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-        >
+            disabled={currentPage === 1}>
           <span className="is-static" aria-label="이전 페이지"><i className="pi pi-chevron-left" aria-hidden="true"/></span>
         </button>
         <span className="is-static" aria-current="page">{currentPage} </span>
         <button
             onClick={() => setCurrentPage(currentPage + 1)}
-            disabled={indexOfLastItem >= boardList.length}
-        >
+            disabled={indexOfLastItem >= boardList.length}>
           <span className="is-static" aria-label="다음 페이지"><i className="pi pi-chevron-right" aria-hidden="true"/></span>
         </button>
       </div>
