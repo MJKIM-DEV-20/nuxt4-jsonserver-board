@@ -29,8 +29,12 @@ export function PostList() {
 
   useEffect(() => {
     async function getLists() {
-      const resp = await getList(currentPage, postPerPage);
-      setBoardList(resp.data);
+      try {
+        const resp = await getList(currentPage, postPerPage);
+        setBoardList(resp.data);
+      } finally {
+        setLoading(false);
+      }
     }
 
     getLists();
@@ -73,41 +77,39 @@ export function PostList() {
         </div>
       </section>
 
-      {/* {isloading ? (
+      {isloading ? (
         <PostListSkeleton />
-      ) : ( */}
-
-      <section className="board-panel" aria-label="게시글 목록}">
-        {boardList?.map((list, index) => (
-          <NavLink to={`/posts/${list.id}`} key={index}>
-            <li className="post-item">
-              <div key={list.id} className="post-item-body">
-                <div className="post-item-head">
-                  <h2 className="post-item-title">
-                    <span>{list?.title}</span>
-                  </h2>
+      ) : (
+        <section className="board-panel" aria-label="게시글 목록}">
+          {boardList?.map((list, index) => (
+            <NavLink to={`/posts/${list.id}`} key={index}>
+              <li className="post-item">
+                <div key={list.id} className="post-item-body">
+                  <div className="post-item-head">
+                    <h2 className="post-item-title">
+                      <span>{list?.title}</span>
+                    </h2>
+                  </div>
+                  <div className="post-item-meta">
+                    <span className="post-author">{list?.author}</span>
+                    <span className="sep" />
+                    <span>{list?.date}</span>
+                    <span className="sep" />
+                    <span>{list.inquries}</span>
+                  </div>
                 </div>
-                <div className="post-item-meta">
-                  <span className="post-author">{list?.author}</span>
-                  <span className="sep" />
-                  <span>{list?.date}</span>
-                  <span className="sep" />
-                  <span>{list.inquries}</span>
+                <div className="post-item-side">
+                  <span className="reply-count has-replies">
+                    <i className="pi pi-comment" aria-hidden="true" />
+                    <span className="sr-only">댓글 </span>
+                    {list.comment}
+                  </span>
                 </div>
-              </div>
-              <div className="post-item-side">
-                <span className="reply-count has-replies">
-                  <i className="pi pi-comment" aria-hidden="true" />
-                  <span className="sr-only">댓글 </span>
-                  {list.comment}
-                </span>
-              </div>
-            </li>
-          </NavLink>
-        ))}
-      </section>
-
-      {/* // )} */}
+              </li>
+            </NavLink>
+          ))}
+        </section>
+      )}
 
       <div className="pager" aria-label="페이지 이동 UI">
         <div>
