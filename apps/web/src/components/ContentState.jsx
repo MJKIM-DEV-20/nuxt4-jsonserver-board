@@ -1,4 +1,4 @@
-export function ContentState({
+export  function ContentState({
   icon = 'pi-info-circle',
   title,
   description,
@@ -22,7 +22,7 @@ export function ContentState({
   )
 }
 
-export function PostListSkeleton() {
+export default function PostListSkeleton() {
   return (
     <div className="post-list-skeleton" aria-busy="true" aria-label="게시글을 불러오고 있어요">
       <div className="skeleton-row">
