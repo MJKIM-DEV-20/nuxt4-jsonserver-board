@@ -1,7 +1,7 @@
 import { Button } from 'primereact/button'
 import { Dialog } from 'primereact/dialog'
 import { InputTextarea } from 'primereact/inputtextarea'
-import { useEffect, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useParams, NavLink, useNavigate} from "react-router-dom";
 
 
@@ -12,6 +12,8 @@ export default function PostDetail() {
   const [board, setBoard] = useState({});
   const [visible,setVisible] = useState(false);
   const [comment, setComment] = useState([]);
+  // const [reply,setReply] = useState("");
+  const replyRef = useRef("")
   const [commentCount,setCommentCount] = useState(0);
   const navigate = useNavigate();
 
@@ -57,7 +59,35 @@ export default function PostDetail() {
     getComments();
   }, []);
 
-
+  // async function getComment() {
+  //   const response = await fetch(
+  //       `http://localhost:4100/comments/?postId=${id}`,
+  //       {
+  //         method: "GET",
+  //       },
+  //   );
+  //   const data = await response.json();
+  //   // console.log(data);
+  //   return data;
+  // }
+  //
+  // useEffect(() => {
+  //   async function getComments() {
+  //     setLoading(true);
+  //     try {
+  //       const resp = await getComment();
+  //       setComment(resp);
+  //       setCommentCount(resp.length);
+  //       // console.log(resp);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //
+  //   getComments();
+  // }, []);
+  //
+  // onSubmit={() => createReply(reply)}
 
 
   // const createReply = async () => {
@@ -67,30 +97,29 @@ export default function PostDetail() {
   //
   // }
 
-  // const createReply = (e) => {
-  //   e.preventDefault()
-  //   fetch(`http://localhost:4100/comments`, {
-  //     method: "POST",
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       id:id,
-  //       cid:cid,
-  //       author: nickname,
-  //       comment: reply,
-  //       date: new Date().toISOString(),
-  //     }),
-  //   }).then(res => {
-  //     if (res.ok) {
-  //       alert('생성이 완료됐습니다.')
-  //       setComment()
-  //     }
-  //     else{
-  //       console.log("error")
-  //     }
-  //   })
-
+  const createReply = (e) => {
+    e.preventDefault()
+    fetch(`http://localhost:4100/comments`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: id,
+        // cid: cid,
+        author: "참치잠만보",
+        comment: replyRef.current.value,
+        date: new Date(),
+      }),
+    }).then(res => {
+      if (res.ok) {
+        alert('생성이 완료됐습니다.')
+        setReply()
+      } else {
+        console.log("error")
+      }
+    })
+  }
 
 
 
@@ -202,10 +231,10 @@ export default function PostDetail() {
             id="comment"
             rows={3}
             placeholder="해결 방법이나 참고 자료를 알려주세요"
-            // value={comment}
+            ref={replyRef}
           />
           <div className="row-end">
-            <Button type="button" label="댓글 등록"  />
+            <Button type="button" label="댓글 등록"  onClick={createReply}/>
           </div>
         </form>
       </section>
