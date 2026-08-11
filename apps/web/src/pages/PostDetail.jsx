@@ -11,6 +11,8 @@ export default function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [visible,setVisible] = useState(false);
+  const [comment, setComment] = useState([]);
+  const [commentCount,setCommentCount] = useState(0);
   const navigate = useNavigate();
 
 
@@ -25,7 +27,72 @@ export default function PostDetail() {
     setLoading(false);
   };
 
-  console.log(board);
+
+
+  async function getComment() {
+    const response = await fetch(
+        `http://localhost:4100/comments/?postId=${id}`,
+        {
+          method: "GET",
+        },
+    );
+    const data = await response.json();
+    // console.log(data);
+    return data;
+  }
+
+  useEffect(() => {
+    async function getComments() {
+      setLoading(true);
+      try {
+        const resp = await getComment();
+        setComment(resp);
+        setCommentCount(resp.length);
+        // console.log(resp);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getComments();
+  }, []);
+
+
+
+
+  // const createReply = async () => {
+  //   const response = await fetch(`http://localhost:4100/comments`,)
+  //
+  //
+  //
+  // }
+
+  // const createReply = (e) => {
+  //   e.preventDefault()
+  //   fetch(`http://localhost:4100/comments`, {
+  //     method: "POST",
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       id:id,
+  //       cid:cid,
+  //       author: nickname,
+  //       comment: reply,
+  //       date: new Date().toISOString(),
+  //     }),
+  //   }).then(res => {
+  //     if (res.ok) {
+  //       alert('생성이 완료됐습니다.')
+  //       setComment()
+  //     }
+  //     else{
+  //       console.log("error")
+  //     }
+  //   })
+
+
+
 
 
   useEffect(() => {
@@ -43,18 +110,6 @@ export default function PostDetail() {
     getBoardDetail();
   }, []);
 
-  //
-  // const deleteBoard = async (id) => {
-  //   const res = await fetch(`http://localhost:4100/posts/${id}`, {
-  //       method: 'DELETE',
-  //     });
-  //   if (res.ok) {
-  //     navigate(`/`)
-  //
-  //   } else {
-  //     console.log('삭제 실패:', res.status);
-  //   }
-  // }
 
 
   const deleteBoard = async (id) => {
@@ -120,33 +175,26 @@ export default function PostDetail() {
       <section className="card comments-card">
         <div className="section-heading">
           <div>
-            {/*<h2 className="section-title">댓글 2개</h2>*/}
-            {/*<p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>*/}
+            <h2 className="section-title">댓글 {commentCount}개</h2>
+            <p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>
           </div>
         </div>
 
         <ul className="comment-list">
-          <li className="comment">
+          {comment?.map((comment,index) => (
+          <li className="comment"  key={String(comment.cid)}>
             <span className="comment-face" aria-hidden="true">작</span>
             <div>
               <div className="author-name">
-                작성자2
-                <span className="author-date comment-when">8월 10일 10:12</span>
+                {comment?.author}
+                <span className="author-date comment-when">{comment?.createAt}</span>
               </div>
-              <p className="comment-text">저도 같은 부분에서 막혔는데 덕분에 해결했습니다. 감사합니다!</p>
+              <p className="comment-text">{comment?.comment}</p>
             </div>
           </li>
-          <li className="comment">
-            <span className="comment-face" aria-hidden="true">작</span>
-            <div>
-              <div className="author-name">
-                작성자5
-                <span className="author-date comment-when">8월 10일 11:40</span>
-              </div>
-              <p className="comment-text">페이지네이션은 쿼리 파라미터로 넘기면 편해요.</p>
-            </div>
-          </li>
+          ))}
         </ul>
+
 
         <form className="comment-form field">
           <label className="field-label" htmlFor="comment">댓글 작성</label>
@@ -154,6 +202,7 @@ export default function PostDetail() {
             id="comment"
             rows={3}
             placeholder="해결 방법이나 참고 자료를 알려주세요"
+            // value={comment}
           />
           <div className="row-end">
             <Button type="button" label="댓글 등록"  />
