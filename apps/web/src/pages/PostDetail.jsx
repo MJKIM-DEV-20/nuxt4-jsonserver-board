@@ -18,6 +18,7 @@ export default function PostDetail() {
   const [rid,setRid] = useState([])
   const [commentCount,setCommentCount] = useState(0);
   const navigate = useNavigate();
+  //comment?.filter(comment => comment.length)
 
 
   const getBoardDetail = async () => {
@@ -33,15 +34,13 @@ export default function PostDetail() {
 
 
 
-  async function getComment() {
-    const response = await fetch(
-        `http://localhost:4100/comments/?postId=${id}`,
+  async function getComment(id) {
+    const response = await fetch(`http://localhost:4100/comments?postId=${id}`,
         {
           method: "GET",
         },
     );
     const data = await response.json();
-    // console.log(data);
     return data;
   }
   //     const postId = data.map(data=>(data.postid));
@@ -92,14 +91,6 @@ export default function PostDetail() {
   //
   // onSubmit={() => createReply(reply)}
 
-
-  // const createReply = async () => {
-  //   const response = await fetch(`http://localhost:4100/comments`,)
-  //
-  //
-  //
-  // }
-
   const createReply = (e) => {
     e.preventDefault()
     fetch(`http://localhost:4100/comments`, {
@@ -109,6 +100,7 @@ export default function PostDetail() {
       },
       body: JSON.stringify({
         id: id,
+        cid:cid,
         postid:postid,
         author: "참치잠만보",
         comment: replyRef.current.value,
@@ -117,10 +109,35 @@ export default function PostDetail() {
     }).then(res => {
       if (res.ok) {
         alert('생성이 완료됐습니다.')
+        navigate('/', { replace: true });
       } else {
         console.log("error")
       }
     })
+  }
+
+
+
+  const updateComment = (e) => {
+    e.preventDefault()
+    fetch(`http://localhost:4100/comments/${id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        comment: replyRef.current.value,
+      }),
+    }).then(res => {
+      if (res.ok) {
+        alert('생성이 완료됐습니다.')
+      }
+      else{
+        console.log("error")
+      }
+    })
+
+    navigate('/', { replace: true });
   }
 
 
@@ -146,12 +163,26 @@ export default function PostDetail() {
       method: 'DELETE',
     });
     if (res.ok) {
-      navigate(`/`)
+      navigate('/', { replace: true });
 
     } else {
       console.log('삭제 실패:', res.status);
     }
   }
+
+  const deleteComment = async (id) => {
+    const res = await fetch(`http://localhost:4100/comments?postId=${id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      navigate('/', { replace: true });
+
+    } else {
+      console.log('삭제 실패:', res.status);
+    }
+  }
+
+
 
   return (
     <>
@@ -204,12 +235,14 @@ export default function PostDetail() {
       <section className="card comments-card">
         <div className="section-heading">
           <div>
-            <h2 className="section-title">댓글 {commentCount}개</h2>
+            <h2 className="section-title">댓글 개</h2>
+
             <p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>
           </div>
         </div>
         <ul className="comment-list">
-          {comment?.map((comment,index) => (
+           {comment?.filter(comment => comment?.postid === id).map((comment,index) => (
+          // {comment?.map((comment,index) => (
           <li className="comment"  key={index}>
             <span className="comment-face" aria-hidden="true">{comment?.author.split("")[0]}</span>
             <div>
@@ -218,6 +251,8 @@ export default function PostDetail() {
                 <span className="author-date comment-when">{comment?.createAt}</span>
               </div>
               <p className="comment-text">{comment?.comment}</p>
+              <button className="comment-button" onClick={() => deleteComment(comment?.cid)}>댓글 삭제</button>
+              <button className="comment-button" onClick={() => updateComment(comment?.cid)}>댓글 수정</button>
             </div>
           </li>
           ))}
@@ -233,7 +268,7 @@ export default function PostDetail() {
             ref={replyRef}
           />
           <div className="row-end">
-            <Button type="button" label="댓글 등록"  onClick={()=>createReply}/>
+            <Button type="button" label="댓글 등록"  onClick={createReply}/>
           </div>
         </form>
       </section>
