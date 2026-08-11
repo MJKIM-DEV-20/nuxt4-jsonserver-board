@@ -27,6 +27,7 @@ export default function PostEdit() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+
                 title: titleRef.current.value,
                 author: nicknameRef.current.value,
                 content: contentRef.current.value,

@@ -29,12 +29,12 @@ export function PostList() {
       params.set("notice", notice);
     }
 
-    if (sort === "views") {
-      params.set("_sort", "views");
-      params.set("_order", "desc");
+    if (sort === "view") {
+      params.set("_sort", "view");
+      params.set("_order", "ASC");
     } else {
-      params.set("_sort", "createdAt");
-      params.set("_order", "desc");
+      params.set("_sort", "latest");
+      params.set("_order", "createAt");
     }
 
     params.set("_page", String(page));
@@ -79,17 +79,6 @@ export function PostList() {
     getLists();
   }, [currentPage, postPerPage, query, notice, sort]);
 
-  // //전체 데이터 길이
-  // useEffect(() => {
-  //   async function getCounts() {
-  //     const res = await fetch("http://localhost:4100/posts");
-  //     const all = await res.json();
-  //     setTotalCount(all.length);
-  //     console.log(all.length);
-  //   }
-
-  //   getCounts();
-  // }, []);
 
   const handlePagination = (pageNumber) => {
     console.log(pageNumber);
@@ -97,10 +86,6 @@ export function PostList() {
     console.log(totalCount);
     if (pageNumber < 1 || pageNumber > totalPages) return;
 
-    // setSearchParams({
-    //   _page: String(pageNumber),
-    //   _limit: String(postPerPage),
-    // });
 
     setSearchParams({
       query,
@@ -121,7 +106,7 @@ export function PostList() {
     });
   };
 
-  const handlesort = (value) => {
+  const handlebars = (value) => {
     setSearchParams({
       query,
       notice,
@@ -168,9 +153,9 @@ export function PostList() {
             <p className="result-count">{totalCount}개의 글</p>
             <label className="sort-control">
               <span className="sr-only">게시글 정렬</span>
-              <select value={sort} onChange={(e) => handlesort(e.target.value)}>
+              <select value={sort} onChange={(e) => handlebars(e.target.value)}>
                 <option value="latest">최신순</option>
-                <option value="views">조회순</option>
+                <option value="view">조회순</option>
               </select>
               <i className="pi pi-chevron-down" aria-hidden="true" />
             </label>

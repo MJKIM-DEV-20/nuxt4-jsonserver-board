@@ -7,7 +7,7 @@ import {Link, useParams, NavLink, useNavigate} from "react-router-dom";
 
 
 export default function PostDetail() {
-  const { id } = useParams(); //
+  const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [visible,setVisible] = useState(false);
@@ -28,10 +28,6 @@ export default function PostDetail() {
   console.log(board);
 
 
-   //useEffect(() => {
-   //  getBoardDetail().then(() => setBoard());
-   //}, [getBoardDetail()]);
-
   useEffect(() => {
     const getBoardDetail = async () => {
       const resp = await fetch(`http://localhost:4100/posts/${id}`,
@@ -47,14 +43,31 @@ export default function PostDetail() {
     getBoardDetail();
   }, []);
 
+  //
+  // const deleteBoard = async (id) => {
+  //   const res = await fetch(`http://localhost:4100/posts/${id}`, {
+  //       method: 'DELETE',
+  //     });
+  //   if (res.ok) {
+  //     navigate(`/`)
+  //
+  //   } else {
+  //     console.log('삭제 실패:', res.status);
+  //   }
+  // }
+
 
   const deleteBoard = async (id) => {
     const res = await fetch(`http://localhost:4100/posts/${id}`, {
-        method: 'DELETE',
-      });
-      return res.ok;
-  }
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      navigate(`/`)
 
+    } else {
+      console.log('삭제 실패:', res.status);
+    }
+  }
 
   return (
     <>
@@ -74,13 +87,13 @@ export default function PostDetail() {
             <span className="author-face" aria-hidden="true">작</span>
             <div>
               <div className="author-name">{board?.author}</div>
-              <div className="author-date">2026년 8월 10일 09:02</div>
+              <div className="author-date">{board?.createAt}</div>
             </div>
           </div>
           <div className="stat-row">
-            <span aria-label="조회 297회">
+            <span aria-label="조회">
               <i className="pi pi-eye" aria-hidden="true" />
-              297
+              {board?.view}
             </span>
             <span aria-label="댓글 2개">
               <i className="pi pi-comment" aria-hidden="true" />
@@ -96,7 +109,7 @@ export default function PostDetail() {
         </div>
 
         <div className="post-actions">
-          <Button type="button" label="글 삭제" severity="danger" icon="pi pi-trash" className="is-static" onClick={()=>setVisible(true)}/>
+          <Button type="button" label="글 삭제" severity="danger" icon="pi pi-trash" className="is-static" onClick={() => setVisible(true)} />
           <span className="p-button p-button-secondary is-static" onClick={() => navigate(`/posts/${id}/edit`)}>
             <i className="pi pi-pencil" aria-hidden="true" />
             <span>글 수정</span>
@@ -150,13 +163,14 @@ export default function PostDetail() {
 
       {/* 퍼블리싱된 삭제 확인 UI. visible 상태와 이벤트는 인턴이 구현한다. */}
       <Dialog
-        visible={false}
+          visible={visible} onHide={() => setVisible(false)}
+          breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}
         header="이 글을 삭제할까요?"
         draggable={false}
         footer={(
           <>
-            <Button type="button" label="취소" severity="help" />
-            <Button type="button" label="삭제" severity="danger" />
+            <Button type="button" label="취소" severity="help" onClick={() => setVisible(false)}/>
+            <Button type="button" label="삭제" severity="danger" onClick={(e) => deleteBoard(board?.id)}/>
           </>
         )}
       >

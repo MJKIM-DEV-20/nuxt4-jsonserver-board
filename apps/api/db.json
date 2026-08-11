@@ -4,92 +4,144 @@
       "id": "1",
       "author": "테스트 작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 20,
+      "createAt": "2023-04-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "2",
       "author": "테스트 수정수정수정",
       "title": "수정수정수정",
-      "content": "ㅏㅣ마ㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏ\n\n1. 테스트\n2.테스트\n3. 테스트"
-    },
-    {
-      "id": "3",
-      "author": "게시글 3 닉네임",
-      "title": "테스트(게시글 3 수정)",
-      "content": "## 게시글 3 ##\n\n# 게시글 3\n# 게시글 3\n## 게시글 3"
+      "content": "ㅏㅣ마ㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏ\n\n1. 테스트\n2.테스트\n3. 테스트",
+      "view": 40,
+      "createAt": "2026-05-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "4",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 160,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "5",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 80,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "6",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 80,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "7",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 80,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "8",
       "author": "가나디",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 80,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "9",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 80,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "10",
       "author": "작성자",
       "title": "게시판 제목",
-      "content": "게시물 내용"
+      "content": "게시물 내용",
+      "view": 40,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "11",
       "title": "dcddd",
       "author": "ddddd",
-      "content": "dddddddddddddddddd"
+      "content": "dddddddddddddddddd",
+      "view": 30,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "12",
       "title": "dddd",
       "author": "ddddddddddd",
-      "content": "dddddddddddddddddddddddd"
+      "content": "dddddddddddddddddddddddd",
+      "view": 20,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": "13",
       "title": "테스트입니다",
       "author": "잠만보",
-      "content": "ㅇㅇㅇㅇㅇㅇㅇ"
+      "content": "ㅇㅇㅇㅇㅇㅇㅇ",
+      "view": 50,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": 14,
       "title": "페이지네이션",
       "author": "nick named",
-      "content": "dddddddddddddddd"
+      "content": "dddddddddddddddd",
+      "view": 55,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": false
     },
     {
       "id": 15,
-      "title": "ddddd",
-      "author": "dddddddd",
-      "content": "ddddddddddddd"
+      "title": "공지",
+      "author": "관리자",
+      "content": "[공지사항]",
+      "view": 160,
+      "createAt": "2023-06-30T10:30:00.000",
+      "notice": true
+    },
+    {
+      "id": 15,
+      "title": "공지",
+      "author": "관리자",
+      "content": "[공지사항]",
+      "view": 100,
+      "createAt": "2026-08-09T10:30:00.000",
+      "notice": true
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "id": 15,
+      "comment": "",
+      "createAt": "2026-08-10T10:30:00.000",
+      "notice": true
+    }
+  ]
 }
