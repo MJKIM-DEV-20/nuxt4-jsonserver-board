@@ -8,12 +8,14 @@ import {Link, useParams, NavLink, useNavigate} from "react-router-dom";
 
 export default function PostDetail() {
   const { id } = useParams();
+  const postid = id
   const [loading, setLoading] = useState(true);
   const [board, setBoard] = useState({});
   const [visible,setVisible] = useState(false);
   const [comment, setComment] = useState([]);
   // const [reply,setReply] = useState("");
   const replyRef = useRef("")
+  const [rid,setRid] = useState([])
   const [commentCount,setCommentCount] = useState(0);
   const navigate = useNavigate();
 
@@ -42,6 +44,8 @@ export default function PostDetail() {
     // console.log(data);
     return data;
   }
+  //     const postId = data.map(data=>(data.postid));
+
 
   useEffect(() => {
     async function getComments() {
@@ -50,7 +54,6 @@ export default function PostDetail() {
         const resp = await getComment();
         setComment(resp);
         setCommentCount(resp.length);
-        // console.log(resp);
       } finally {
         setLoading(false);
       }
@@ -106,7 +109,7 @@ export default function PostDetail() {
       },
       body: JSON.stringify({
         id: id,
-        // cid: cid,
+        postid:postid,
         author: "참치잠만보",
         comment: replyRef.current.value,
         date: new Date(),
@@ -114,14 +117,11 @@ export default function PostDetail() {
     }).then(res => {
       if (res.ok) {
         alert('생성이 완료됐습니다.')
-        setReply()
       } else {
         console.log("error")
       }
     })
   }
-
-
 
 
   useEffect(() => {
@@ -179,9 +179,9 @@ export default function PostDetail() {
               <i className="pi pi-eye" aria-hidden="true" />
               {board?.view}
             </span>
-            <span aria-label="댓글 2개">
+            <span aria-label="댓글">
               <i className="pi pi-comment" aria-hidden="true" />
-              2
+              {comment.length}
             </span>
           </div>
         </div>
@@ -208,11 +208,10 @@ export default function PostDetail() {
             <p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>
           </div>
         </div>
-
         <ul className="comment-list">
           {comment?.map((comment,index) => (
-          <li className="comment"  key={String(comment.cid)}>
-            <span className="comment-face" aria-hidden="true">작</span>
+          <li className="comment"  key={index}>
+            <span className="comment-face" aria-hidden="true">{comment?.author.split("")[0]}</span>
             <div>
               <div className="author-name">
                 {comment?.author}
@@ -234,7 +233,7 @@ export default function PostDetail() {
             ref={replyRef}
           />
           <div className="row-end">
-            <Button type="button" label="댓글 등록"  onClick={createReply}/>
+            <Button type="button" label="댓글 등록"  onClick={()=>createReply}/>
           </div>
         </form>
       </section>
