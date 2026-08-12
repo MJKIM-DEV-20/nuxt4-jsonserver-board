@@ -4,13 +4,14 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import React, { useState } from "react";
 import { useRef, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 
 export default function PostsForm({ initialData, onSubmit, onCancel }) {
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [author, setAuthor] = useState(initialData?.author ?? "");
   const [content, setContent] = useState(initialData?.content ?? "");
   const [visible, setVisible] = useState(false);
+  const [validation, setValidation] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,10 +20,12 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
 
   return (
       <>
+      <NavLink to='/'className='Nav'>
       <span className="back-link is-static">
         <i className="pi pi-chevron-left" aria-hidden="true" />
         전체 글로
       </span>
+      </NavLink>
 
         <section className="page-intro page-intro--compact">
           <div>
@@ -49,7 +52,9 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   placeholder="예: 페이지네이션 쿼리는 어떻게 넘기시나요?"
                   aria-describedby="title-count"
                   value={title}
+                  required
                   onChange={(e) => setTitle(e.target.value)}
+                  maxlength={100}
               />
               <div className="field-foot">
               <span className="field-hint" id="title-count">
@@ -68,14 +73,22 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
               <InputText
                   id="author"
                   placeholder="목록에 표시될 이름"
-                  aria-describedby="author-count"
+                  aria-describedby={validation ? "error" : undefined}
+                  aria-invalid={validation ? "true" : false}
+                  required
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
+                  onFocus={() => setValidation(true)}
+                  maxLength={20}
               />
               <div className="field-foot">
               <span className="field-hint" id="author-count">
                 {author.length} / 20자
               </span>
+                {/*{validation &&*/}
+                {/*    <p id="error">*/}
+                {/*        닉네임을 20자 이내로 입력해주세요*/}
+                {/*    </p>}*/}
               </div>
             </div>
 
@@ -92,8 +105,9 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   placeholder="막힌 부분, 시도해본 방법, 궁금한 점을 차례로 적어보세요"
                   aria-describedby="content-count"
                   value={content}
+                  required
                   onChange={(e) => setContent(e.target.value)}
-              />
+                  maxLength={2000}/>
               <div className="field-foot">
               <span className="field-hint" id="content-count">
                 {content.length} / 2,000자

@@ -3,6 +3,7 @@ import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
+import ArticleSkeleton from '../components/ContentState.jsx'
 
 export default function PostDetail() {
     const { id } = useParams();
@@ -169,15 +170,14 @@ export default function PostDetail() {
           전체 글로
         </NavLink>
       </span>
-            {/*{ board?.map((item, index) => (*/}
             <article className="card article-card">
                 <h1 className="page-title article-title">{board && board?.title}</h1>
 
                 <div className="post-head">
                     <div className="author">
-            <span className="author-face" aria-hidden="true">
-              작
-            </span>
+                        <span className="author-face" aria-hidden="true">
+                          {board?.author?.split("")[0]}
+                        </span>
                         <div>
                             <div className="author-name">{board?.author}</div>
                             <div className="author-date">{board?.createdAt}</div>
@@ -217,7 +217,6 @@ export default function PostDetail() {
           </span>
                 </div>
             </article>
-            {/*))}*/}
             <section className="card comments-card">
                 <div className="section-heading">
                     <div>
@@ -227,8 +226,7 @@ export default function PostDetail() {
                     </div>
                 </div>
                 <ul className="comment-list">
-                    {comment &&
-                        comment?.map((comment, index) => (
+                    {comment && comment?.map((comment, index) => (
                             <li className="comment" key={comment.id}>
                                 <span className="comment-face" aria-hidden="true">
                                   {comment?.author?.split("")[0]}
@@ -269,14 +267,12 @@ export default function PostDetail() {
                                             <p className="comment-text">{comment?.content}</p>
                                             <button
                                                 className="comment-button"
-                                                onClick={() => deleteComment(comment?.id)}
-                                            >
+                                                onClick={() => deleteComment(comment?.id)}>
                                                 댓글 삭제
                                             </button>
                                             <button
                                                 className="comment-button"
-                                                onClick={() => startEdit(comment)}
-                                            >
+                                                onClick={() => startEdit(comment)}>
                                                 댓글 수정
                                             </button>
                                         </>

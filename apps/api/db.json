@@ -41,7 +41,7 @@
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 36,
+      "views": 37,
       "createdAt": "2025-03-09T15:00:00",
       "notice": false
     },
@@ -68,7 +68,7 @@
       "author": "가나디",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 80,
+      "views": 81,
       "createdAt": "2026-08-01T15:00:00",
       "notice": false
     },
@@ -86,7 +86,7 @@
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 82,
+      "views": 85,
       "createdAt": "2026-08-09T15:00:00",
       "notice": false
     },
@@ -109,15 +109,6 @@
       "notice": false
     },
     {
-      "id": "13",
-      "title": "테스트입니다",
-      "author": "잠만보",
-      "content": "ㅇㅇㅇㅇㅇㅇㅇ",
-      "views": 52,
-      "createdAt": "2026-08-09T13:00:00",
-      "notice": false
-    },
-    {
       "id": "14",
       "title": "페이지네이션",
       "author": "nick named",
@@ -128,28 +119,28 @@
     },
     {
       "id": "15",
-      "title": "[공지사항 테스트]",
-      "author": "관리자1",
-      "content": "공지사항 테스트입니다",
-      "views": 98,
+      "title": "공지사항",
+      "author": "관리자 테스트 닉네임",
+      "content": "공지사항 테스트입니다\n\n공지사항 1\n공지사항 2",
+      "views": 107,
       "notice": true,
-      "Date": "2026-08-10T15:00:00"
+      "createdAt": "2026-08-10T15:00:00"
     },
     {
       "id": "16",
       "title": "[공지사항]",
       "author": "관리자",
       "content": "공지사항입니다",
-      "views": 160,
+      "views": 164,
       "notice": true,
-      "Date": "2026-08-10T15:00:00"
+      "createdAt": "2026-08-10T15:00:00"
     },
     {
       "id": "4150",
       "title": "ddd",
       "author": "ddddddddd",
       "content": "ddddddddddddddddddd",
-      "views": 1,
+      "views": 4,
       "createdAt": "2026-08-12T05:36:20.383Z",
       "notice": false
     }
@@ -206,11 +197,11 @@
       "createdAt": "2026-08-12T05:15:00.463Z"
     },
     {
-      "id": "8e2c",
-      "postId": "4150",
+      "id": "f14f",
+      "postId": "10",
       "author": "보",
-      "content": "참치잠만보 댓글 수정",
-      "createdAt": "2026-08-12T05:36:28.972Z"
+      "content": "테스트테스트\n\n피카츄 라이튜\n",
+      "createdAt": "2026-08-12T06:19:47.421Z"
     }
   ]
 }

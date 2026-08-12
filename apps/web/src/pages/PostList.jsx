@@ -190,7 +190,7 @@ export function PostList() {
                                     <span className="sep" />
                                     <span>{list?.createdAt}</span>
                                     <span className="sep" />
-                                    <span>조회 {list?.view}</span>
+                                    <span>조회 {list?.views}</span>
                                   </div>
                                 </div>
                                 <div className="post-item-side">
@@ -216,7 +216,7 @@ export function PostList() {
                                 <span className="sep" />
                                 <span>{list?.createdAt}</span>
                                 <span className="sep" />
-                                <span>{list?.views}</span>
+                                <span>조회 {list?.views}</span>
                               </div>
                             </div>
                             <div className="post-item-side">
