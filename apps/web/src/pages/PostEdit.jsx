@@ -1,52 +1,47 @@
-import { Button } from 'primereact/button'
-import { Dialog } from 'primereact/dialog'
-import { InputText } from 'primereact/inputtext'
-import { InputTextarea } from 'primereact/inputtextarea'
-import React, {useState, useEffect, useCallback, useRef} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function PostEdit() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [title, setTitle] = useState("")
-    const [nickname, setNickname] = useState("")
-    const [contents,SetContents] = useState("")
-    const titleRef = useRef("")
-    const nicknameRef = useRef("")
-    const contentRef = useRef("")
+    const [title, setTitle] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [contents, SetContents] = useState("");
+    const titleRef = useRef("");
+    const nicknameRef = useRef("");
+    const contentRef = useRef("");
     const [isEdit, setEdit] = useState(false);
     const [visible, setVisible] = useState(false);
 
-
     const handleSubmit = (e) => {
-        e.preventDefault()
-        fetch(`http://192.168.1.109:4100/posts/${id}`, {
+        e.preventDefault();
+        fetch(`http://localhost:4100/posts/${id}`, {
             method: "PATCH",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
-
                 title: titleRef.current.value,
                 author: nicknameRef.current.value,
                 content: contentRef.current.value,
             }),
-        }).then(res => {
+        }).then((res) => {
             if (res.ok) {
-                alert('생성이 완료됐습니다.')
+                alert("생성이 완료됐습니다.");
+            } else {
+                console.log("error");
             }
-            else{
-                console.log("error")
-            }
-        })
+        });
 
-        navigate('/', { replace: true });
-        console.log(titleRef.current.value)
-        console.log(titleRef.current.value)
-        console.log(contentRef.current.value)
-    }
-
+        navigate("/", { replace: true });
+        console.log(titleRef.current.value);
+        console.log(titleRef.current.value);
+        console.log(contentRef.current.value);
+    };
 
     return (
         <>
@@ -58,7 +53,9 @@ export default function PostEdit() {
             <section className="page-intro page-intro--compact">
                 <div>
                     <h1 className="page-title">글 수정하기</h1>
-                    <p className="page-description">질문이나 해결 방법을 작성하면 목록에 바로 보여요.</p>
+                    <p className="page-description">
+                        질문이나 해결 방법을 작성하면 목록에 바로 보여요.
+                    </p>
                 </div>
             </section>
 
@@ -67,7 +64,9 @@ export default function PostEdit() {
                     <div className="field">
                         <label className="field-label" htmlFor="title">
                             제목
-                            <span className="req" aria-hidden="true">*</span>
+                            <span className="req" aria-hidden="true">
+                *
+              </span>
                         </label>
                         <InputText
                             id="title"
@@ -76,14 +75,18 @@ export default function PostEdit() {
                             ref={titleRef}
                         />
                         <div className="field-foot">
-                            <span className="field-hint" id="title-count">0 / 100자</span>
+              <span className="field-hint" id="title-count">
+                0 / 100자
+              </span>
                         </div>
                     </div>
 
                     <div className="field">
                         <label className="field-label" htmlFor="author">
                             닉네임
-                            <span className="req" aria-hidden="true">*</span>
+                            <span className="req" aria-hidden="true">
+                *
+              </span>
                         </label>
                         <InputText
                             id="author"
@@ -92,14 +95,18 @@ export default function PostEdit() {
                             ref={nicknameRef}
                         />
                         <div className="field-foot">
-                            <span className="field-hint" id="author-count">0 / 20자</span>
+              <span className="field-hint" id="author-count">
+                0 / 20자
+              </span>
                         </div>
                     </div>
 
                     <div className="field">
                         <label className="field-label" htmlFor="content">
                             내용
-                            <span className="req" aria-hidden="true">*</span>
+                            <span className="req" aria-hidden="true">
+                *
+              </span>
                         </label>
                         <InputTextarea
                             id="content"
@@ -109,18 +116,33 @@ export default function PostEdit() {
                             ref={contentRef}
                         />
                         <div className="field-foot">
-                            <span className="field-hint" id="content-count">0 / 2,000자</span>
+              <span className="field-hint" id="content-count">
+                0 / 2,000자
+              </span>
                         </div>
                     </div>
 
                     <div className="form-footer">
-                        <span className="p-button p-button-help btn-xl is-static" onClick={()=>setVisible(true)}>작성 취소</span>
-                        <Button type="button" label="글 등록" className="btn-xl" icon="pi pi-check" onClick={handleSubmit}/>
+            <span
+                className="p-button p-button-help btn-xl is-static"
+                onClick={() => setVisible(true)}
+            >
+              작성 취소
+            </span>
+                        <Button
+                            type="button"
+                            label="글 등록"
+                            className="btn-xl"
+                            icon="pi pi-check"
+                            onClick={handleSubmit}
+                        />
                     </div>
                 </form>
 
                 <aside className="writing-guide" aria-labelledby="writing-guide-title">
-                    <span className="guide-icon" aria-hidden="true"><i className="pi pi-lightbulb" /></span>
+          <span className="guide-icon" aria-hidden="true">
+            <i className="pi pi-lightbulb" />
+          </span>
                     <h2 id="writing-guide-title">답변받기 좋은 글</h2>
                     <ul>
                         <li>문제가 생긴 상황을 먼저 알려주세요.</li>
@@ -130,20 +152,32 @@ export default function PostEdit() {
                 </aside>
             </div>
 
-
             <Dialog
-                visible={visible} onHide={() => setVisible(false)}
-                breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}
+                visible={visible}
+                onHide={() => setVisible(false)}
+                breakpoints={{ "960px": "75vw", "640px": "100vw" }}
+                style={{ width: "50vw" }}
                 header="작성을 그만둘까요?"
                 draggable={false}
-                footer={(
+                footer={
                     <>
-                        <Button type="button" label="계속 작성" severity="help" onClick={() => setVisible(false)}/>
-                        <Button type="button" label="내용 버리고 나가기" severity="danger" onClick={() => navigate('/')}/>
+                        <Button
+                            type="button"
+                            label="계속 작성"
+                            severity="help"
+                            onClick={() => setVisible(false)}
+                        />
+                        <Button
+                            type="button"
+                            label="내용 버리고 나가기"
+                            severity="danger"
+                            onClick={() => navigate("/")}
+                        />
                     </>
-                )}>
+                }
+            >
                 지금 나가면 입력한 내용이 사라져요.
             </Dialog>
         </>
-    )
+    );
 }

@@ -386,6 +386,11 @@ textarea {
   pointer-events: none;
 }
 
+.Nav{
+  text-decoration:none;
+}
+
+
 /* Post list */
 .post-list {
   margin: 0;
