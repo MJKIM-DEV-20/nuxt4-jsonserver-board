@@ -108,6 +108,7 @@ export function PostList() {
         });
     };
 
+
     const handlebars = (value) => {
         setSearchParams({
             query,
