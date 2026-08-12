@@ -5,6 +5,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ContentState } from "./ContentState";
 
 export default function PostsForm({ initialData, onSubmit, onCancel }) {
   const [title, setTitle] = useState(initialData?.title ?? "");
@@ -12,8 +13,31 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
   const [content, setContent] = useState(initialData?.content ?? "");
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const nextErrors = {};
+
+    if (!title.trim()) {
+      nextErrors.title = "제목을 입력해주세요.";
+    }
+
+    if (!author.trim()) {
+      nextErrors.author = "닉네임을 입력해주세요.";
+    }
+
+    if (!content.trim()) {
+      nextErrors.content = "내용을 입력해주세요."; // author → content
+    }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
     onSubmit({ title, author, content });
   };
 
@@ -46,15 +70,31 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
             </label>
             <InputText
               id="title"
+              maxLength={100}
               placeholder="예: 페이지네이션 쿼리는 어떻게 넘기시나요?"
-              aria-describedby="title-count"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              aria-invalid={Boolean(errors.title)}
+              aria-describedby={[
+                "title-count",
+                errors.title ? "title-error" : null,
+              ]
+                .filter(Boolean)
+                .join(" ")}
             />
             <div className="field-foot">
               <span className="field-hint" id="title-count">
                 {title.length} / 100자
               </span>
+              {errors.title && (
+                <ContentState
+                  id="title-error"
+                  icon="pi-exclamation-triangle"
+                  title="제목을 입력해주세요."
+                  description="게시글 제목은 필수입니다."
+                  tone="danger"
+                />
+              )}
             </div>
           </div>
 
@@ -67,15 +107,25 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
             </label>
             <InputText
               id="author"
-              placeholder="목록에 표시될 이름"
-              aria-describedby="author-count"
+              placeholder="닉네임"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
+              aria-invalid={Boolean(errors.author)}
+              aria-describedby={errors.author ? "author-error" : undefined}
             />
             <div className="field-foot">
               <span className="field-hint" id="author-count">
                 {author.length} / 20자
               </span>
+              {errors.author && (
+                <ContentState
+                  id="author-error"
+                  icon="pi-exclamation-triangle"
+                  title="닉네임을 입력해주세요."
+                  description="닉네임은 필수입니다."
+                  tone="danger"
+                />
+              )}
             </div>
           </div>
 
@@ -88,16 +138,25 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
             </label>
             <InputTextarea
               id="content"
-              rows={12}
-              placeholder="막힌 부분, 시도해본 방법, 궁금한 점을 차례로 적어보세요"
-              aria-describedby="content-count"
+              placeholder="내용을 입력해주세요."
               value={content}
               onChange={(e) => setContent(e.target.value)}
+              aria-invalid={Boolean(errors.content)}
+              aria-describedby={errors.content ? "content-error" : undefined}
             />
             <div className="field-foot">
               <span className="field-hint" id="content-count">
                 {content.length} / 2,000자
               </span>
+              {errors.content && (
+                <ContentState
+                  id="content-error"
+                  icon="pi-exclamation-triangle"
+                  title="내용을 입력해주세요."
+                  description="게시글 내용은 필수입니다."
+                  tone="danger"
+                />
+              )}
             </div>
           </div>
 
