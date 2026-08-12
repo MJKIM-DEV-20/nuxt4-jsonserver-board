@@ -4,20 +4,21 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PostListSkeleton from "../components/ContentState.jsx";
 
+
 export function PostList() {
   const [boardList, setBoardList] = useState([]);
   const [isloading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalCount, setTotalCount] = useState(0);
-
   const currentPage = Number(searchParams.get("_page")) || 1;
   const postPerPage = Number(searchParams.get("_limit")) || 10;
-
   const totalPages = Math.ceil(totalCount / postPerPage);
-
   const query = searchParams.get("query") || "";
   const notice = searchParams.get("notice") || "all";
   const sort = searchParams.get("sort") || "latest";
+
+  //날짜
+
 
   async function getList(page, limit, query, notice, sort) {
     const params = new URLSearchParams();
@@ -121,13 +122,13 @@ export function PostList() {
     });
   };
 
+
+
   return (
       <>
         <section className="page-intro" aria-labelledby="board-title">
           <div>
-            <h1 className="page-title" id="board-title">
-              질문과 해결 방법
-            </h1>
+            <h1 className="page-title" id="board-title">질문과 해결 방법</h1>
             <p className="page-description">
               미션을 진행하며 생긴 질문과 해결한 방법을 나눠보세요.
             </p>
@@ -137,10 +138,12 @@ export function PostList() {
         <section className="board-panel" aria-label="게시글 목록">
           <div className="board-toolbar">
             <div className="tabs" role="group" aria-label="게시글 필터">
+              {/*<button type="button" className="tab is-active" aria-pressed="true">전체</button>*/}
+              {/*<button type="button" className="tab" aria-pressed="false">공지</button>*/}
               <button
                   type="button"
                   onClick={() => noticeTab("all")}
-                  className="tab is-active"
+                  className="tab"
                   aria-pressed="true"
               >
                 전체
@@ -149,7 +152,7 @@ export function PostList() {
                   type="button"
                   onClick={() => noticeTab("true")}
                   className="tab"
-                  aria-pressed="false"
+                  aria-pressed="true"
               >
                 공지
               </button>
@@ -166,67 +169,96 @@ export function PostList() {
               </label>
             </div>
           </div>
+
+          <div className="card card--list">
+            <ul className="post-list">
+              {isloading ? (
+                  <PostListSkeleton />
+              ) : (
+                  <section className="board-panel" aria-label="게시글 목록}">
+                    {boardList && boardList?.map((list, index) => (
+                        <NavLink to={`/posts/${list.id}`} key={index} className='Nav'>
+                          {list?.notice === true ? (
+                              <li className="post-item is-notice">
+                                <div className="post-item-body">
+                                  <div className="post-item-head">
+                                    <span className="pill-notice">공지</span>
+                                    <h2 className="post-item-title"><span>{list?.title}</span></h2>
+                                  </div>
+                                  <div className="post-item-meta">
+                                    <span className="post-author">{list?.author}</span>
+                                    <span className="sep" />
+                                    <span>{list?.createdAt}</span>
+                                    <span className="sep" />
+                                    <span>조회 {list?.view}</span>
+                                  </div>
+                                </div>
+                                <div className="post-item-side">
+                                  <span className="reply-count has-replies">
+                                    <i className="pi pi-comment" aria-hidden="true" />
+                                    <span className="sr-only">댓글 </span>
+                                    {list?.comment?.length()}
+                                  </span>
+                                </div>
+                              </li>
+
+                          ):(
+
+                          <li className="post-item">
+                            <div key={list.id} className="post-item-body">
+                              <div className="post-item-head">
+                                <h2 className="post-item-title">
+                                  <span>{list?.title}</span>
+                                </h2>
+                              </div>
+                              <div className="post-item-meta">
+                                <span className="post-author">{list?.author}</span>
+                                <span className="sep" />
+                                <span>{list?.createdAt}</span>
+                                <span className="sep" />
+                                <span>{list?.views}</span>
+                              </div>
+                            </div>
+                            <div className="post-item-side">
+                            <span className="reply-count has-replies">
+                              <i className="pi pi-comment" aria-hidden="true" />
+                              <span className="sr-only">댓글 </span>
+                              {list?.comment?.length}
+                            </span>
+                            </div>
+                          </li>
+                          )}
+                        </NavLink>
+                    ))}
+                  </section>
+              )}
+            </ul>
+          </div>
         </section>
 
-        {isloading ? (
-            <PostListSkeleton />
-        ) : (
-            <section className="board-panel" aria-label="게시글 목록}">
-              {boardList?.map((list, index) => (
-                  <NavLink to={`/posts/${list.id}`} key={index}>
-                    <li className="post-item">
-                      <div key={list.id} className="post-item-body">
-                        <div className="post-item-head">
-                          <h2 className="post-item-title">
-                            <span>{list?.title}</span>
-                          </h2>
-                        </div>
-                        <div className="post-item-meta">
-                          <span className="post-author">{list?.author}</span>
-                          <span className="sep" />
-                          <span>{list?.date}</span>
-                          <span className="sep" />
-                          <span>{list.inquries}</span>
-                        </div>
-                      </div>
-                      <div className="post-item-side">
-                  <span className="reply-count has-replies">
-                    <i className="pi pi-comment" aria-hidden="true" />
-                    <span className="sr-only">댓글 </span>
-                    {list.comment}
-                  </span>
-                      </div>
-                    </li>
-                  </NavLink>
-              ))}
-            </section>
-        )}
+
 
         <div className="pager" aria-label="페이지 이동 UI">
           <div>
+             <span className="is-static" aria-label="이전 페이지">
             <button
                 onClick={() => handlePagination(currentPage - 1)}
-                disabled={currentPage <= 1}
-            >
-            <span className="is-static" aria-label="이전 페이지">
-              <i className="pi pi-chevron-left" aria-hidden="true" />
-            </span>
+                disabled={currentPage <= 1}>
+              <i className="pi pi-chevron-left" aria-hidden="true" ></i>
             </button>
-            <span className="is-static" aria-current="page">
-            {currentPage}
-          </span>
+             </span>
+            <span className="is-static" aria-current="page">{currentPage}</span>
 
             {/* 다음 버튼 */}
+            <span className="is-static" aria-label="다음 페이지">
             <button
                 onClick={() => handlePagination(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-            >
-            <span className="is-static" aria-label="다음 페이지">
+                disabled={currentPage >= totalPages}>
               <i className="pi pi-chevron-right" aria-hidden="true" />
-            </span>
             </button>
+          </span>
           </div>
         </div>
       </>
-  );
+  )
 }

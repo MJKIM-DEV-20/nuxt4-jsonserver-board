@@ -1,10 +1,4 @@
-export  function ContentState({
-                                  icon = 'pi-info-circle',
-                                  title,
-                                  description,
-                                  compact = false,
-                                  tone = 'neutral',
-                              }) {
+export function ContentState({icon = 'pi-info-circle', title, description, compact = false, tone = 'neutral',}) {
     const className = [
         'content-state',
         compact ? 'content-state--compact' : '',

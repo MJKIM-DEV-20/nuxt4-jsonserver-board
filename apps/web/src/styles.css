@@ -43,8 +43,8 @@
   --motion-ease: cubic-bezier(0.2, 0, 0, 1);
 
   --font-family: "Pretendard Variable", Pretendard, system-ui, -apple-system,
-    BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
-    sans-serif;
+  BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+  sans-serif;
 
   --primary-color: var(--primary);
   --primary-color-text: var(--canvas);
@@ -212,6 +212,8 @@ textarea {
 /* Page heading */
 .page-intro {
   margin-bottom: var(--space-xl);
+  padding-left: calc(var(--space-xl) * 2);
+
 }
 
 .page-intro--compact {
@@ -286,6 +288,11 @@ textarea {
   justify-content: space-between;
   gap: var(--space-md);
   margin-bottom: var(--space-sm);
+}
+
+.board-panel{
+  padding-left: calc(var(--space-xl) * 2);
+  padding-right: calc(var(--space-xl) * 2);
 }
 
 .tabs {
@@ -385,11 +392,6 @@ textarea {
   font-size: var(--type-small);
   pointer-events: none;
 }
-
-.Nav{
-  text-decoration:none;
-}
-
 
 /* Post list */
 .post-list {
@@ -539,6 +541,13 @@ textarea {
   color: var(--weak-fg);
   font-size: var(--type-body);
 }
+
+.Nav{
+  text-decoration:none;
+}
+
+
+
 
 .content-state--danger .content-state-icon {
   background: color-mix(in srgb, var(--canvas) 90%, var(--danger));
@@ -994,7 +1003,7 @@ textarea {
   font-family: inherit;
   font-size: var(--type-body);
   transition: border-color var(--motion-fast) var(--motion-ease),
-    background-color var(--motion-fast) var(--motion-ease);
+  background-color var(--motion-fast) var(--motion-ease);
 }
 
 .p-inputtext::placeholder {
@@ -1057,8 +1066,8 @@ button.p-button {
   text-decoration: none;
   cursor: pointer;
   transition: background-color var(--motion-fast) var(--motion-ease),
-    border-color var(--motion-fast) var(--motion-ease),
-    color var(--motion-fast) var(--motion-ease);
+  border-color var(--motion-fast) var(--motion-ease),
+  color var(--motion-fast) var(--motion-ease);
 }
 
 .p-button:not(:disabled):hover {
@@ -1190,7 +1199,7 @@ button.p-button {
 .pager > *,
 .back-link {
   transition: background-color var(--motion-fast) var(--motion-ease),
-    color var(--motion-fast) var(--motion-ease);
+  color var(--motion-fast) var(--motion-ease);
 }
 
 .is-static {
@@ -1294,6 +1303,13 @@ button.p-button {
   .form-card {
     padding: var(--space-lg);
   }
+
+
+  .card .article-card{
+    margin-left: var(--space-lg);
+    margin-right: var(--space-lg);
+  }
+
 
   .card--list {
     padding: 0 var(--space-md);

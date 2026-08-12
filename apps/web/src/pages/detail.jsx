@@ -164,7 +164,7 @@ export default function PostDetail() {
     return (
         <>
       <span className="back-link is-static">
-        <NavLink to={"/"} className='Nav'>
+        <NavLink to={"/"}>
           <i className="pi pi-chevron-left" aria-hidden="true" />
           전체 글로
         </NavLink>

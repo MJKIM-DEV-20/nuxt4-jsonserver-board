@@ -26,14 +26,14 @@ export default function PostForm() {
 
   const handleSubmit = async (formData) => {
     if (isEdit) {
-      await fetch(`http://localhost:4200/posts/${id}`, {
+      await fetch(`http://localhost:4100/posts/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       navigate(`/posts/${id}`);
     } else {
-      const res = await fetch("http://localhost:4200/posts", {
+      const res = await fetch("http://localhost:4100/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
