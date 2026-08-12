@@ -17,7 +17,7 @@ export default function PostForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`http://localhost:4100/posts`, {
+    fetch(`http://192.168.1.109:4100/posts`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

@@ -1,6 +1,3 @@
-// API = "http://localhost:4100"
-
-
 export async function getList() {
     const response = await fetch("http://localhost:4100/posts",
         {

@@ -22,7 +22,7 @@ export default function PostDetail() {
 
 
   const getBoardDetail = async () => {
-    const resp = await fetch(`http://localhost:4100/posts/${id}`,
+    const resp = await fetch(`http://192.168.1.109:4100/posts/${id}`,
         {
           method: 'GET',
         });
@@ -35,7 +35,7 @@ export default function PostDetail() {
 
 
   async function getComment(id) {
-    const response = await fetch(`http://localhost:4100/comments?postId=${id}`,
+    const response = await fetch(`http://192.168.1.109:4100/comments?postId=${id}`,
         {
           method: "GET",
         },
@@ -93,7 +93,7 @@ export default function PostDetail() {
 
   const createReply = (e) => {
     e.preventDefault()
-    fetch(`http://localhost:4100/comments`, {
+    fetch(`http://192.168.1.109/comments`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -120,7 +120,7 @@ export default function PostDetail() {
 
   const updateComment = (e) => {
     e.preventDefault()
-    fetch(`http://localhost:4100/comments/${id}`, {
+    fetch(`http://192.168.1.109:4100/comments/${id}`, {
       method: "PATCH",
       headers: {
         'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ export default function PostDetail() {
 
   useEffect(() => {
     const getBoardDetail = async () => {
-      const resp = await fetch(`http://localhost:4100/posts/${id}`,
+      const resp = await fetch(`http://192.168.1.109:4100/posts/${id}`,
           {
             method: 'GET',
           });
@@ -159,7 +159,7 @@ export default function PostDetail() {
 
 
   const deleteBoard = async (id) => {
-    const res = await fetch(`http://localhost:4100/posts/${id}`, {
+    const res = await fetch(`http://192.168.1.109:4100/posts/${id}`, {
       method: 'DELETE',
     });
     if (res.ok) {
@@ -171,7 +171,7 @@ export default function PostDetail() {
   }
 
   const deleteComment = async (id) => {
-    const res = await fetch(`http://localhost:4100/comments?postId=${id}`, {
+    const res = await fetch(`http://192.168.1.109:4100/comments?postId=${id}`, {
       method: 'DELETE',
     });
     if (res.ok) {

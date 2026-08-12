@@ -21,7 +21,7 @@ export default function PostEdit() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        fetch(`http://localhost:4100/posts/${id}`, {
+        fetch(`http://192.168.1.109:4100/posts/${id}`, {
             method: "PATCH",
             headers: {
                 'Content-Type': 'application/json'
@@ -130,7 +130,7 @@ export default function PostEdit() {
                 </aside>
             </div>
 
-            {/* 퍼블리싱된 이탈 확인 UI. visible 상태와 이벤트는 인턴이 구현한다. */}
+
             <Dialog
                 visible={visible} onHide={() => setVisible(false)}
                 breakpoints={{'960px': '75vw', '640px': '100vw'}} style={{width: '50vw'}}

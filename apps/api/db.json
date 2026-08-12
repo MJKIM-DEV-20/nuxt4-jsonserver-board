@@ -1,20 +1,11 @@
 {
   "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "홍길동"
     }
   ],
   "posts": [
-    {
-      "id": "2",
-      "author": "테스트 수정수정수정",
-      "title": "수정수정수정",
-      "content": "ㅏㅣ마ㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏ\n\n1. 테스트\n2.테스트\n3. 테스트",
-      "view": 40,
-      "createAt": "2026-05-30T10:30:00.000",
-      "notice": false
-    },
     {
       "id": "4",
       "author": "작성자",
@@ -25,19 +16,10 @@
       "notice": false
     },
     {
-      "id": "5",
-      "author": "작성자",
-      "title": "게시판 제목",
-      "content": "게시물 내용",
-      "view": 80,
-      "createAt": "2023-06-30T10:30:00.000",
-      "notice": false
-    },
-    {
       "id": "6",
-      "author": "작성자",
-      "title": "게시판 제목",
-      "content": "게시물 내용",
+      "author": "ㅇㅇㅇ",
+      "title": "ㅇㅇㅇㅇㅇㅇㅇㅇ",
+      "content": "ㅇㄹ",
       "view": 80,
       "createAt": "2023-06-30T10:30:00.000",
       "notice": false
@@ -70,15 +52,6 @@
       "notice": false
     },
     {
-      "id": "11",
-      "title": "dcddd",
-      "author": "ddddd",
-      "content": "dddddddddddddddddd",
-      "view": 30,
-      "createAt": "2023-06-30T10:30:00.000",
-      "notice": false
-    },
-    {
       "id": "12",
       "title": "dddd",
       "author": "ddddddddddd",
@@ -93,15 +66,6 @@
       "author": "잠만보",
       "content": "ㅇㅇㅇㅇㅇㅇㅇ",
       "view": 50,
-      "createAt": "2023-06-30T10:30:00.000",
-      "notice": false
-    },
-    {
-      "id": "14",
-      "title": "페이지네이션",
-      "author": "nick named",
-      "content": "dddddddddddddddd",
-      "view": 55,
       "createAt": "2023-06-30T10:30:00.000",
       "notice": false
     },
@@ -122,6 +86,12 @@
       "view": 100,
       "createAt": "2026-08-09T10:30:00.000",
       "notice": true
+    },
+    {
+      "id": "5a28",
+      "title": "ㅇㄹㄹㄹㅇㅇㅇㄹㅇㄴㄴㄹ",
+      "author": "ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ",
+      "content": "ㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹ"
     }
   ],
   "comments": [
@@ -130,28 +100,32 @@
       "postid": "16",
       "author": "작성자2",
       "comment": "공지사항 확인했습니다",
-      "createAt": "2026-08-10T10:30:00.000"
+      "createAt": "2026-08-10T10:30:00.000",
+      "id": "0e5a"
     },
     {
       "cid": 2,
       "postid": "16",
       "author": "작성자5",
       "comment": "저도 게시판 공지사항 확인했습니다",
-      "createAt": "2026-08-10T10:30:00.000"
+      "createAt": "2026-08-10T10:30:00.000",
+      "id": "2268"
     },
     {
       "cid": 3,
       "postid": "14",
       "author": "참치잠만보",
       "comment": "ㄷㄷㄷㄷㄷㄷ",
-      "date": "2026-08-11T02:26:12.130Z"
+      "date": "2026-08-11T02:26:12.130Z",
+      "id": "c4ea"
     },
     {
       "cid": 4,
       "postid": "4",
       "author": "참치잠만보",
       "comment": "ㄷㄷㄷㄷㄷㄷ",
-      "date": "2026-08-11T02:28:09.302Z"
+      "date": "2026-08-11T02:28:09.302Z",
+      "id": "013d"
     }
   ]
 }

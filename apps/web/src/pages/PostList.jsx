@@ -43,7 +43,7 @@ export function PostList() {
     // 페이지네이션
 
     const response = await fetch(
-      `http://localhost:4100/posts?${params.toString()}`,
+      `http://192.168.1.109:4100/posts?${params.toString()}`,
       {
         method: "GET",
       },
