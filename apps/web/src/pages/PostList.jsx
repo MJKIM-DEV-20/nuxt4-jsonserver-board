@@ -1,7 +1,6 @@
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { data, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import PostListSkeleton from "../components/ContentState.jsx";
 import { ContentState } from "../components/ContentState.jsx";
 
