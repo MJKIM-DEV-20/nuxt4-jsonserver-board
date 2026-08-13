@@ -424,8 +424,8 @@ export default function PostDetail() {
                             loading={isDeletingBoard}
                         />
                     </>}>
-                댓글 {comments.length}개도 함께 사라지고, 되돌릴 수 없어요.
-                {deleteError && (
+                        댓글 {comments.length}개도 함께 사라지고, 되돌릴 수 없어요.
+                        {deleteError && (
                         <p role="alert" className="dialog-error">
                              {deleteError}
                         </p>

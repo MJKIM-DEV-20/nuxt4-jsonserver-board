@@ -11,12 +11,39 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [author, setAuthor] = useState(initialData?.author ?? "");
   const [content, setContent] = useState(initialData?.content ?? "");
+   const isDirty =
+           title !== (initialData?.title ?? "") ||
+           author !== (initialData?.author ?? "") ||
+           content !== (initialData?.content ?? "");
+  const titleRef = useRef(null);
+  const authorRef = useRef(null);
+  const contentRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (!isDirty) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
+
+
+   const focusFirstError = (nextErrors) => {
+       if (nextErrors.title) titleRef.current?.focus();
+       else if (nextErrors.author) authorRef.current?.focus();
+       else if (nextErrors.content) contentRef.current?.focus();
+     };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const nextErrors = {};
 
@@ -29,16 +56,22 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
     }
 
     if (!content.trim()) {
-      nextErrors.content = "내용을 입력해주세요."; // author → content
+      nextErrors.content = "내용을 입력해주세요.";
     }
 
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
+      focusFirstError(nextErrors);
       return;
     }
 
-    onSubmit({ title, author, content });
+    setIsSubmitting(true);
+    try {
+      await onSubmit({title, author, content});
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -73,6 +106,7 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   maxLength={100}
                   placeholder="예: 페이지네이션 쿼리는 어떻게 넘기시나요?"
                   value={title}
+                  ref={titleRef}
                   onChange={(e) => setTitle(e.target.value)}
                   aria-invalid={Boolean(errors.title)}
                   aria-describedby={[
@@ -109,6 +143,7 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   id="author"
                   placeholder="닉네임"
                   value={author}
+                  ref={authorRef}
                   onChange={(e) => setAuthor(e.target.value)}
                   aria-invalid={Boolean(errors.author)}
                   aria-describedby={errors.author ? "author-error" : undefined}
@@ -140,6 +175,7 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   id="content"
                   placeholder="내용을 입력해주세요."
                   value={content}
+                  ref={contentRef}
                   onChange={(e) => setContent(e.target.value)}
                   aria-invalid={Boolean(errors.content)}
                   aria-describedby={errors.content ? "content-error" : undefined}
@@ -163,8 +199,13 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
             <div className="form-footer">
             <span
                 className="p-button p-button-help btn-xl is-static"
-                onClick={() => setVisible(true)}
-            >
+                onClick={() => {
+                  if (isDirty) {
+                    setVisible(true);
+                  } else {
+                    navigate("/");
+                  }
+                }}>
               작성 취소
             </span>
 
@@ -173,8 +214,10 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
                   className="btn-xl"
                   icon="pi pi-check"
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
               >
-                {initialData ? "작성완료" : "수정완료"}
+                {isSubmitting ? "저장 중..." : initialData ? "수정 완료" : "작성 완료"}
               </Button>
             </div>
           </form>

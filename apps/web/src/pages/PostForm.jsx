@@ -49,7 +49,6 @@ export default function PostForm() {
   };
 
   if ((isEdit && loading) || !post) return <p>로딩중...</p>;
-
   return (
       <>
         <PostsForm

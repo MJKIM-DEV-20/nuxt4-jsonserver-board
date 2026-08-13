@@ -105,8 +105,8 @@ export default function PostEdit() {
                         <label className="field-label" htmlFor="content">
                             내용
                             <span className="req" aria-hidden="true">
-                *
-              </span>
+                                *
+                            </span>
                         </label>
                         <InputTextarea
                             id="content"

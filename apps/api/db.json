@@ -5,7 +5,7 @@
       "author": "테스트 작성자",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 18,
+      "views": 19,
       "createdAt": "2023-08-09T15:00:00",
       "notice": false
     },
@@ -86,7 +86,7 @@
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 87,
+      "views": 89,
       "createdAt": "2026-08-09T15:00:00",
       "notice": false
     },
@@ -95,7 +95,7 @@
       "title": "dddd",
       "author": "ddddddddddd",
       "content": "dddddddddddddddddddddddd",
-      "views": 11,
+      "views": 12,
       "createdAt": "2026-08-08T14:00:00",
       "notice": false
     },
@@ -104,7 +104,7 @@
       "title": "페이지네이션",
       "author": "nick named",
       "content": "dddddddddddddddd",
-      "views": 85,
+      "views": 86,
       "createdAt": "2026-08-09T15:00:00",
       "notice": false
     },
@@ -113,7 +113,7 @@
       "title": "공지사항",
       "author": "관리자",
       "content": "공지사항 테스트입니다\n\n공지사항 1\n공지사항 2",
-      "views": 116,
+      "views": 118,
       "notice": true,
       "createdAt": "2026-08-10T15:00:00"
     },
@@ -125,6 +125,24 @@
       "views": 167,
       "notice": true,
       "createdAt": "2026-08-10T15:00:00"
+    },
+    {
+      "id": "33a4",
+      "title": "ㅇ",
+      "author": "ㅇㅇㅇ",
+      "content": "ㅇㅇㅇ",
+      "views": 3,
+      "createdAt": "2026-08-13T07:32:13.743Z",
+      "notice": false
+    },
+    {
+      "id": "445f",
+      "title": "json 쿼리는 어떻게??",
+      "author": "테스트테스트",
+      "content": "ㅇㅇㅇㅇㅇㅇㅇ",
+      "views": 2,
+      "createdAt": "2026-08-13T07:45:34.746Z",
+      "notice": false
     }
   ],
   "comments": [
@@ -191,6 +209,13 @@
       "author": "보",
       "content": "ㄴㄴㄴㄴ",
       "createdAt": "2026-08-13T05:43:26.029Z"
+    },
+    {
+      "id": "9c1e",
+      "postId": "15",
+      "author": "보",
+      "content": "sssss",
+      "createdAt": "2026-08-13T06:21:31.612Z"
     }
   ]
 }

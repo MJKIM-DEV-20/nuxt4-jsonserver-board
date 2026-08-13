@@ -1,46 +1,53 @@
-export async function getList() {
-    const response = await fetch("http://localhost:4100/posts",
-        {
-            method: 'GET',
-        });
-    const data = await response.json();
-    console.log(data)
+import {API_URL} from "./url.jsx";
+
+// 게시글 조회
+export function getPost(id) {
+    return fetch(`${API_BASE_URL}/posts/${id}`);
+}
+
+// 조회수 갱신
+export function updatePostViews(id, views) {
+    return fetch(`${API_BASE_URL}/posts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ views }),
+    });
+}
+
+// 게시글 삭제
+export function deletePost(id) {
+    return fetch(`${API_BASE_URL}/posts/${id}`, {
+        method: "DELETE",
+    });
 }
 
 
-// export  async function CreateData(){
-//     const response = await fetch("http://localhost:4100/write", {
-//     method: "POST",
-//     headers: {
-//         "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//         title: "Test",
-//         comment: "3회",
-//         Id: 1,
-//         author:"작성자",
-//         content: "I am testing!",
-//         date: new Date(),
-//         type:"일반",
-//         inquries:"35회",
-//     }),
-//     })
-//     .then((response) => response.json())
-//     .then((data) => console.log(data));
-//         return response.json();
-//     }
-//
-//
-//     async function UpdateData(){
-//
-//
-//
-//
-//     }
-//
-// export async function deleteItem(id) {
-//     const res = await fetch(`http://localhost:4100/posts/:id`, {
-//         method: 'DELETE',
-//     });
-//     return res.ok;
-// }
+// 댓글 목록 조회
+export function getComments(postId) {
+    return fetch(`${API_BASE_URL}/comments?postId=${postId}`);
+}
+
+// 댓글 작성
+export function createComment({ postId, author, content, createdAt }) {
+    return fetch(`${API_BASE_URL}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId, author, content, createdAt }),
+    });
+}
+
+// 댓글 수정
+export function updateComment(commentId, content) {
+    return fetch(`${API_BASE_URL}/comments/${commentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content }),
+    });
+}
+
+// 댓글 삭제
+export function deleteComment(commentId) {
+    return fetch(`${API_BASE_URL}/comments/${commentId}`, {
+        method: "DELETE",
+    });
+}
