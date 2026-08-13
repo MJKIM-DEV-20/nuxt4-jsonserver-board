@@ -3,7 +3,7 @@ import { data, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PostListSkeleton from "../components/ContentState.jsx";
-
+import { ContentState } from "../components/ContentState.jsx";
 
 export function PostList() {
   const [boardList, setBoardList] = useState([]);
@@ -13,12 +13,10 @@ export function PostList() {
   const currentPage = Number(searchParams.get("_page")) || 1;
   const postPerPage = Number(searchParams.get("_limit")) || 10;
   const totalPages = Math.ceil(totalCount / postPerPage);
+  const [error, setError] = useState(null);
   const query = searchParams.get("query") || "";
   const notice = searchParams.get("notice") || "all";
   const sort = searchParams.get("sort") || "latest";
-
-  //날짜
-
 
   async function getList(page, limit, query, notice, sort) {
     const params = new URLSearchParams();
@@ -61,31 +59,54 @@ export function PostList() {
   }
 
   useEffect(() => {
-    async function getLists() {
-      setLoading(true);
+    let ignore = false;
 
+    async function fetchList() {
+      setLoading(true);
+      +   setError(null);
       try {
-        const resp = await getList(
+        const resp = await getListWithCommentCounts(
             currentPage,
             postPerPage,
             query,
             notice,
             sort,
         );
-
-        console.log("query:", query);
-        console.log("resp:", resp);
-        console.log("검색 결과:", resp.data);
-
-        setBoardList(resp.data);
-        setTotalCount(resp.total);
+        if (!ignore) {
+          setBoardList(resp.data);
+          setTotalCount(resp.total);
+        }
+          } catch (e) {
+            if (!ignore) setError("게시글을 불러오지 못했습니다.");
       } finally {
-        setLoading(false);
+        if (!ignore) setLoading(false);
       }
     }
 
-    getLists();
+    fetchList();
+    return () => {
+      ignore = true;
+    };
   }, [currentPage, postPerPage, query, notice, sort]);
+
+  async function getListWithCommentCounts(page, limit, query, notice, sort) {
+    const { data, total } = await getList(page, limit, query, notice, sort);
+
+    const commentsRes = await fetch(`http://localhost:4100/comments`);
+    const allComments = await commentsRes.json();
+
+    const countMap = allComments.reduce((acc, c) => {
+      acc[c.postId] = (acc[c.postId] || 0) + 1;
+      return acc;
+    }, {});
+
+    const withCounts = data.map((post) => ({
+      ...post,
+      commentCount: countMap[post.id] || 0,
+    }));
+
+    return { data: withCounts, total };
+  }
 
   const handlePagination = (pageNumber) => {
     console.log(pageNumber);
@@ -122,13 +143,13 @@ export function PostList() {
     });
   };
 
-
-
   return (
       <>
         <section className="page-intro" aria-labelledby="board-title">
           <div>
-            <h1 className="page-title" id="board-title">질문과 해결 방법</h1>
+            <h1 className="page-title" id="board-title">
+              질문과 해결 방법
+            </h1>
             <p className="page-description">
               미션을 진행하며 생긴 질문과 해결한 방법을 나눠보세요.
             </p>
@@ -174,91 +195,119 @@ export function PostList() {
             <ul className="post-list">
               {isloading ? (
                   <PostListSkeleton />
+              ) : error ? (
+                  <ContentState
+                      icon="pi-exclamation-triangle"
+                      title="조회에 실패했습니다"
+                      description={error}
+                      tone="danger"
+                  />
+              ) : boardList.length === 0 ? (
+                  <ContentState
+                      icon="pi-inbox"
+                      title="검색 결과가 없습니다"
+                      description={
+                        query
+                            ? `'${query}'에 대한 결과가 없습니다.`
+                            : "게시글이 없습니다."
+                      }
+                  />
               ) : (
                   <section className="board-panel" aria-label="게시글 목록}">
-                    {boardList && boardList?.map((list, index) => (
-                        <NavLink to={`/posts/${list.id}`} key={index} className='Nav'>
-                          {list?.notice === true ? (
-                              <li className="post-item is-notice">
-                                <div className="post-item-body">
-                                  <div className="post-item-head">
-                                    <span className="pill-notice">공지</span>
-                                    <h2 className="post-item-title"><span>{list?.title}</span></h2>
-                                  </div>
-                                  <div className="post-item-meta">
-                                    <span className="post-author">{list?.author}</span>
-                                    <span className="sep" />
-                                    <span>{list?.createdAt}</span>
-                                    <span className="sep" />
-                                    <span>조회 {list?.views}</span>
-                                  </div>
-                                </div>
-                                <div className="post-item-side">
-                                  <span className="reply-count has-replies">
-                                    <i className="pi pi-comment" aria-hidden="true" />
-                                    <span className="sr-only">댓글 </span>
-                                    {list?.comment?.length()}
-                                  </span>
-                                </div>
-                              </li>
-
-                          ):(
-
-                          <li className="post-item">
-                            <div key={list.id} className="post-item-body">
-                              <div className="post-item-head">
-                                <h2 className="post-item-title">
-                                  <span>{list?.title}</span>
-                                </h2>
-                              </div>
-                              <div className="post-item-meta">
-                                <span className="post-author">{list?.author}</span>
-                                <span className="sep" />
-                                <span>{list?.createdAt}</span>
-                                <span className="sep" />
-                                <span>조회 {list?.views}</span>
-                              </div>
-                            </div>
-                            <div className="post-item-side">
+                    {boardList &&
+                        boardList?.map((list, index) => (
+                            <NavLink
+                                to={`/posts/${list.id}`}
+                                key={index}
+                                className="Nav"
+                            >
+                              {list?.notice === true ? (
+                                  <li className="post-item is-notice">
+                                    <div className="post-item-body">
+                                      <div className="post-item-head">
+                                        <span className="pill-notice">공지</span>
+                                        <h2 className="post-item-title">
+                                          <span>{list?.title}</span>
+                                        </h2>
+                                      </div>
+                                      <div className="post-item-meta">
+                              <span className="post-author">
+                                {list?.author}
+                              </span>
+                                        <span className="sep" />
+                                        <span>{list?.createdAt}</span>
+                                        <span className="sep" />
+                                        <span>조회 {list?.views}</span>
+                                      </div>
+                                    </div>
+                                    <div className="post-item-side">
                             <span className="reply-count has-replies">
                               <i className="pi pi-comment" aria-hidden="true" />
                               <span className="sr-only">댓글 </span>
-                              {list?.comment?.length}
+                              {list?.commentCount}
                             </span>
-                            </div>
-                          </li>
-                          )}
-                        </NavLink>
-                    ))}
+                                    </div>
+                                  </li>
+                              ) : (
+                                  <li className="post-item">
+                                    <div key={list.id} className="post-item-body">
+                                      <div className="post-item-head">
+                                        <h2 className="post-item-title">
+                                          <span>{list?.title}</span>
+                                        </h2>
+                                      </div>
+                                      <div className="post-item-meta">
+                              <span className="post-author">
+                                {list?.author}
+                              </span>
+                                        <span className="sep" />
+                                        <span>{list?.createdAt}</span>
+                                        <span className="sep" />
+                                        <span>조회 {list?.views}</span>
+                                      </div>
+                                    </div>
+                                    <div className="post-item-side">
+                            <span className="reply-count has-replies">
+                              <i className="pi pi-comment" aria-hidden="true" />
+                              <span className="sr-only">댓글 </span>
+                              {list?.commentCount}
+                            </span>
+                                    </div>
+                                  </li>
+                              )}
+                            </NavLink>
+                        ))}
                   </section>
               )}
             </ul>
           </div>
         </section>
 
-
-
         <div className="pager" aria-label="페이지 이동 UI">
           <div>
-             <span className="is-static" aria-label="이전 페이지">
+          <span className="is-static" aria-label="이전 페이지">
             <button
                 onClick={() => handlePagination(currentPage - 1)}
-                disabled={currentPage <= 1}>
-              <i className="pi pi-chevron-left" aria-hidden="true" ></i>
+                disabled={currentPage <= 1}
+            >
+              <i className="pi pi-chevron-left" aria-hidden="true"></i>
             </button>
-             </span>
-            <span className="is-static" aria-current="page">{currentPage}</span>
+          </span>
+            <span className="is-static" aria-current="page">
+            {currentPage}
+          </span>
 
             {/* 다음 버튼 */}
             <span className="is-static" aria-label="다음 페이지">
             <button
                 onClick={() => handlePagination(currentPage + 1)}
-                disabled={currentPage >= totalPages}>
+                disabled={currentPage >= totalPages}
+            >
               <i className="pi pi-chevron-right" aria-hidden="true" />
             </button>
           </span>
           </div>
         </div>
       </>
-  )
+  );
 }

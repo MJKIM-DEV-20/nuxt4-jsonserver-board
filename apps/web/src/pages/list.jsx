@@ -139,16 +139,14 @@ export function PostList() {
                             type="button"
                             onClick={() => noticeTab("all")}
                             className="tab"
-                            aria-pressed="true"
-                        >
+                            aria-pressed="true">
                             전체
                         </button>
                         <button
                             type="button"
                             onClick={() => noticeTab("true")}
                             className="tab"
-                            aria-pressed="true"
-                        >
+                            aria-pressed="true">
                             공지
                         </button>
                     </div>
@@ -188,18 +186,17 @@ export function PostList() {
                                     </div>
                                 </div>
                                 <div className="post-item-side">
-                  <span className="reply-count has-replies">
-                    <i className="pi pi-comment" aria-hidden="true" />
-                    <span className="sr-only">댓글 </span>
-                      {list?.comment}
-                  </span>
+                                  <span className="reply-count has-replies">
+                                    <i className="pi pi-comment" aria-hidden="true" />
+                                    <span className="sr-only">댓글 </span>
+                                      {list?.comment}
+                                  </span>
                                 </div>
                             </li>
                         </NavLink>
                     ))}
                 </section>
             )}
-
             <div className="pager" aria-label="페이지 이동 UI">
                 <div>
                     <button
@@ -211,10 +208,8 @@ export function PostList() {
             </span>
                     </button>
                     <span className="is-static" aria-current="page">
-            {currentPage}
-          </span>
-
-                    {/* 다음 버튼 */}
+                        {currentPage}
+                    </span>
                     <button
                         onClick={() => handlePagination(currentPage + 1)}
                         disabled={currentPage >= totalPages}

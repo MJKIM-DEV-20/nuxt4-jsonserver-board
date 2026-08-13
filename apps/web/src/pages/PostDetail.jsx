@@ -1,27 +1,132 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import { useEffect, useRef, useState } from "react";
-import { Link, useParams, NavLink, useNavigate } from "react-router-dom";
-import ArticleSkeleton from '../components/ContentState.jsx'
+import { useCallback, useEffect, useRef, useState } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import {
+    ArticleSkeleton,
+    ContentState,
+    CommentSkeleton,
+} from "../components/ContentState.jsx";
 
 export default function PostDetail() {
     const { id } = useParams();
-    const postid = id;
-    const [loading, setLoading] = useState(true);
-    const [board, setBoard] = useState({});
-    const [visible, setVisible] = useState(false);
-    const [comment, setComment] = useState([]);
-    const replyRef = useRef("");
-    const [rid, setRid] = useState([]);
-    const [commentCount, setCommentCount] = useState(0);
     const navigate = useNavigate();
+
+    const [board, setBoard] = useState(null);
+    const [boardLoading, setBoardLoading] = useState(true);
+    const [boardError, setBoardError] = useState(null);
+
+    const [visible, setVisible] = useState(false);
+    const [isDeletingBoard, setIsDeletingBoard] = useState(false);
+
+    const [comments, setComments] = useState([]);
+    const [commentsLoading, setCommentsLoading] = useState(true);
+    const [commentsError, setCommentsError] = useState(null);
+
+    const [replyValue, setReplyValue] = useState("");
+    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+
     const [editingId, setEditingId] = useState(null);
     const [editValue, setEditValue] = useState("");
+    const [isEditSubmitting, setIsEditSubmitting] = useState(false);
+
+    const [deletingIds, setDeletingIds] = useState(new Set());
+    const [deleteError, setDeleteError] = useState(null);
+
+
+    useEffect(() => {
+        let ignore = false;
+
+        async function getBoardDetail() {
+            setBoardLoading(true);
+            setBoardError(null);
+            try {
+                const resp = await fetch(`http://localhost:4100/posts/${id}`);
+
+                if (resp.status === 404) {
+                    if (!ignore) setBoardError("존재하지 않는 게시글입니다.");
+                    return;
+                }
+                if (!resp.ok) {
+                    if (!ignore) setBoardError("게시글을 불러오지 못했습니다.");
+                    return;
+                }
+
+                const data = await resp.json();
+                if (ignore) return;
+
+                try {
+                    await fetch(`http://localhost:4100/posts/${id}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ views: data.views + 1 }),
+                    });
+                } catch {}
+
+                if (!ignore) setBoard({ ...data, views: data.views + 1 });
+            } catch (e) {
+                if (!ignore) setBoardError("네트워크 오류가 발생했습니다.");
+            } finally {
+                if (!ignore) setBoardLoading(false);
+            }
+        }
+
+        getBoardDetail();
+        return () => {
+            ignore = true;
+        };
+    }, [id]);
+
+    const refreshComments = useCallback(async () => {
+        setCommentsLoading(true);
+        setCommentsError(null);
+        try {
+            const res = await fetch(`http://localhost:4100/comments?postId=${id}`);
+            if (!res.ok) throw new Error("FAILED");
+            const data = await res.json();
+            setComments(data);
+        } catch (e) {
+            setCommentsError("댓글을 불러오지 못했습니다.");
+        } finally {
+            setCommentsLoading(false);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        refreshComments();
+    }, [refreshComments]);
+    const createReply = async (e) => {
+        e.preventDefault();
+        if (isSubmittingComment) return;
+
+        const value = replyValue.trim();
+        if (!value) return;
+
+        setIsSubmittingComment(true);
+        try {
+            const res = await fetch(`http://localhost:4100/comments`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    postId: id,
+                    author: "보",
+                    content: value,
+                    createdAt: new Date().toISOString(),
+                }),
+            });
+            if (res.ok) {
+                setReplyValue("");
+                await refreshComments();
+            }
+        } finally {
+            setIsSubmittingComment(false);
+        }
+    };
 
     const startEdit = (comment) => {
         setEditingId(comment.id);
-        setEditValue(comment.content); // 수정전
+        setEditValue(comment.content);
     };
 
     const cancelEdit = () => {
@@ -31,173 +136,122 @@ export default function PostDetail() {
 
     const submitEdit = async (e, commentId) => {
         e.preventDefault();
-        const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: editValue }),
-        });
-        if (res.ok) {
-            setEditingId(null);
-            refreshComments();
-        }
-    };
+        if (isEditSubmitting) return;
 
-    async function getComment(id) {
-        const response = await fetch(
-            `http://localhost:4100/comments?postId=${id}`,
-            {
-                method: "GET",
-            },
-        );
-        const data = await response.json();
-        return data;
-    }
-    //     const postId = data.map(data=>(data.postid));
-
-    useEffect(() => {
-        async function getComments() {
-            setLoading(true);
-            try {
-                const resp = await getComment(id);
-                console.log("댓글 응답:", resp); // ← 여기 찍어봐
-                setComment(resp);
-                setCommentCount(resp.length);
-            } finally {
-                setLoading(false);
+        setIsEditSubmitting(true);
+        try {
+            const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content: editValue }),
+            });
+            if (res.ok) {
+                setEditingId(null);
+                await refreshComments();
             }
-        }
-        getComments();
-    }, [id]);
-
-    async function refreshComments() {
-        const resp = await getComment(id);
-        setComment(resp);
-        setCommentCount(resp.length);
-    }
-
-    const createReply = async (e) => {
-        e.preventDefault();
-        const res = await fetch(`http://localhost:4100/comments`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                postId: id,
-                author: "보",
-                content: replyRef.current.value,
-                createdAt: new Date().toISOString(),
-            }),
-        });
-        if (res.ok) {
-            replyRef.current.value = "";
-            refreshComments(); // navigate 대신 목록만 갱신
+        } finally {
+            setIsEditSubmitting(false);
         }
     };
 
     const deleteComment = async (commentId) => {
-        const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
-            method: "DELETE",
-        });
-        if (res.ok) {
-            refreshComments(); // navigate 대신 목록만 갱신
+        if (deletingIds.has(commentId)) return;
+        setDeletingIds((prev) => new Set(prev).add(commentId));
+
+        try {
+            const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
+                method: "DELETE",
+            });
+            if (res.ok) await refreshComments();
+        } finally {
+            setDeletingIds((prev) => {
+                const next = new Set(prev);
+                next.delete(commentId);
+                return next;
+            });
         }
     };
 
-    const updateComment = (e, commentId) => {
-        e.preventDefault();
-        fetch(`http://localhost:4100/comments/${commentId}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ comment: replyRef.current.value }),
-        }).then((res) => {
-            if (res.ok) alert("수정 완료");
-        });
-    };
-
-    //  const getBoardDetail = async () => {
-    //     const resp = await fetch(`http://localhost:4100/posts/${id}`, {
-    //       method: "GET",
-    //     });
-    //     const data = await resp.json();
-    //     setBoard(data);
-    //     console.log(data);
-    //     setLoading(false);
-    //   };
-
-    useEffect(() => {
-        let ignore = false;
-
-        const getBoardDetail = async () => {
-            const resp = await fetch(`http://localhost:4100/posts/${id}`, {
-                method: "GET",
+    const deleteBoard = async (boardId) => {
+        if (isDeletingBoard) return;
+        setIsDeletingBoard(true);
+        setDeleteError(null);
+        try {
+            const res = await fetch(`http://localhost:4100/posts/${boardId}`, {
+                method: "DELETE",
             });
-            const data = await resp.json();
-
-            if (ignore) return;
-
-            await fetch(`http://localhost:4100/posts/${id}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ views: data.views + 1 }),
-            });
-
-            setBoard({ ...data, views: data.views + 1 });
-            setLoading(false);
-        };
-
-        getBoardDetail();
-
-        return () => {
-            ignore = true;
-        };
-    }, [id]);
-
-    const deleteBoard = async (id) => {
-        const res = await fetch(`http://localhost:4100/posts/${id}`, {
-            method: "DELETE",
-        });
-        if (res.ok) {
-            navigate("/", { replace: true });
-        } else {
-            console.log("삭제 실패:", res.status);
+            if (res.ok) {
+                navigate("/", { replace: true });
+            } else {
+                setDeleteError("삭제에 실패했습니다. 다시 시도해주세요")
+            }
+        } catch (e) {
+                setDeleteError("네트워크 오류로 삭제하지 못했습니다. 다시 시도해주세요.");
+        } finally {
+            setIsDeletingBoard(false);
         }
     };
+
+    if (boardLoading) return <ArticleSkeleton />;
+
+    if (boardError) {
+        return (
+            <ContentState
+                icon="pi-exclamation-triangle"
+                title="게시글을 불러올 수 없습니다"
+                description={boardError}
+                tone="danger"
+            />
+        );
+    }
+
+    if (!board) {
+        return (
+            <ContentState
+                icon="pi-inbox"
+                title="게시글이 없습니다"
+                description="삭제되었거나 존재하지 않는 게시글입니다."
+            />
+        );
+    }
 
     return (
         <>
       <span className="back-link is-static">
-        <NavLink to={"/"} className='Nav'>
+        <NavLink to={"/"} className="Nav">
           <i className="pi pi-chevron-left" aria-hidden="true" />
           전체 글로
         </NavLink>
       </span>
+
             <article className="card article-card">
-                <h1 className="page-title article-title">{board && board?.title}</h1>
+                <h1 className="page-title article-title">{board.title}</h1>
 
                 <div className="post-head">
                     <div className="author">
-                        <span className="author-face" aria-hidden="true">
-                          {board?.author?.split("")[0]}
-                        </span>
+            <span className="author-face" aria-hidden="true">
+              {board.author?.split("")[0]}
+            </span>
                         <div>
-                            <div className="author-name">{board?.author}</div>
-                            <div className="author-date">{board?.createdAt}</div>
+                            <div className="author-name">{board.author}</div>
+                            <div className="author-date">{board.createdAt}</div>
                         </div>
                     </div>
                     <div className="stat-row">
             <span aria-label="조회">
               <i className="pi pi-eye" aria-hidden="true" />
-                {board?.views}
+                {board.views}
             </span>
                         <span aria-label="댓글">
               <i className="pi pi-comment" aria-hidden="true" />
-                            {comment.length}
+                            {comments.length}
             </span>
                     </div>
                 </div>
 
                 <hr className="rule" />
 
-                <div className="post-body">{board?.content}</div>
+                <div className="post-body">{board.content}</div>
 
                 <div className="post-actions">
                     <Button
@@ -206,7 +260,10 @@ export default function PostDetail() {
                         severity="danger"
                         icon="pi pi-trash"
                         className="is-static"
-                        onClick={() => setVisible(true)}
+                        onClick={() => {
+                                   setDeleteError(null);
+                                   setVisible(true);
+                                 }}
                     />
                     <span
                         className="p-button p-button-secondary is-static"
@@ -217,62 +274,97 @@ export default function PostDetail() {
           </span>
                 </div>
             </article>
+
             <section className="card comments-card">
                 <div className="section-heading">
                     <div>
-                        <h2 className="section-title">댓글 {comment.length}개</h2>
-
+                        <h2 className="section-title">댓글 {comments.length}개</h2>
                         <p>답변이나 참고 자료를 나누면 더 빨리 해결할 수 있어요.</p>
                     </div>
                 </div>
-                <ul className="comment-list">
-                    {comment && comment?.map((comment, index) => (
+
+                {commentsLoading ? (
+                    <CommentSkeleton />
+                ) : commentsError ? (
+                    <ContentState
+                        icon="pi-exclamation-triangle"
+                        title="댓글을 불러올 수 없습니다"
+                        description={commentsError}
+                        tone="danger"
+                        compact
+                    />
+                ) : comments.length === 0 ? (
+                    <ContentState
+                        icon="pi-comment"
+                        title="아직 댓글이 없습니다"
+                        description="첫 댓글을 남겨보세요."
+                        compact
+                    />
+                ) : (
+                    <ul className="comment-list">
+                        {comments.map((comment) => (
                             <li className="comment" key={comment.id}>
-                                <span className="comment-face" aria-hidden="true">
-                                  {comment?.author?.split("")[0]}
-                                </span>
+                <span className="comment-face" aria-hidden="true">
+                  {comment.author?.split("")[0]}
+                </span>
                                 <div>
                                     <div className="author-name">
-                                        {comment?.author}
+                                        {comment.author}
                                         <span className="author-date comment-when">
-                                      {comment?.createdAt}
-                                    </span>
+                      {comment.createdAt}
+                    </span>
                                     </div>
 
                                     {editingId === comment.id ? (
                                         <form
                                             className="comment-form field"
-                                            onSubmit={(e) => submitEdit(e, comment.id)}>
-                                            <label className="field-label" htmlFor="comment">
+                                            onSubmit={(e) => submitEdit(e, comment.id)}
+                                        >
+                                            <label
+                                                className="field-label"
+                                                htmlFor={`comment-edit-${comment.id}`}
+                                            >
                                                 댓글 수정
                                             </label>
                                             <InputTextarea
-                                                id="comment"
+                                                id={`comment-edit-${comment.id}`}
                                                 rows={3}
                                                 placeholder="해결 방법이나 참고 자료를 알려주세요"
                                                 value={editValue}
                                                 onChange={(e) => setEditValue(e.target.value)}
+                                                disabled={isEditSubmitting}
                                             />
                                             <div className="row-end">
-                                                <Button type="submit" label="댓글 등록" />
+                                                <Button
+                                                    type="submit"
+                                                    label={isEditSubmitting ? "저장 중..." : "댓글 등록"}
+                                                    disabled={isEditSubmitting || !editValue.trim()}
+                                                    loading={isEditSubmitting}
+                                                />
                                                 <Button
                                                     type="button"
                                                     label="댓글 취소"
                                                     onClick={cancelEdit}
+                                                    disabled={isEditSubmitting}
                                                 />
                                             </div>
                                         </form>
                                     ) : (
                                         <>
-                                            <p className="comment-text">{comment?.content}</p>
+                                            <p className="comment-text">{comment.content}</p>
                                             <button
                                                 className="comment-button"
-                                                onClick={() => deleteComment(comment?.id)}>
-                                                댓글 삭제
+                                                onClick={() => deleteComment(comment.id)}
+                                                disabled={deletingIds.has(comment.id)}
+                                            >
+                                                {deletingIds.has(comment.id)
+                                                    ? "삭제 중..."
+                                                    : "댓글 삭제"}
                                             </button>
                                             <button
                                                 className="comment-button"
-                                                onClick={() => startEdit(comment)}>
+                                                onClick={() => startEdit(comment)}
+                                            >
                                                 댓글 수정
                                             </button>
                                         </>
@@ -280,9 +372,10 @@ export default function PostDetail() {
                                 </div>
                             </li>
                         ))}
-                </ul>
+                    </ul>
+                )}
 
-                <form className="comment-form field">
+                <form className="comment-form field" onSubmit={createReply}>
                     <label className="field-label" htmlFor="comment">
                         댓글 작성
                     </label>
@@ -290,21 +383,29 @@ export default function PostDetail() {
                         id="comment"
                         rows={3}
                         placeholder="해결 방법이나 참고 자료를 알려주세요"
-                        ref={replyRef}
+                        value={replyValue}
+                        onChange={(e) => setReplyValue(e.target.value)}
+                        disabled={isSubmittingComment}
                     />
                     <div className="row-end">
-                        <Button type="button" label="댓글 등록" onClick={createReply} />
+                        <Button
+                            type="submit"
+                            label={isSubmittingComment ? "등록 중..." : "댓글 등록"}
+                            disabled={isSubmittingComment || !replyValue.trim()}
+                            loading={isSubmittingComment}
+                        />
                     </div>
                 </form>
             </section>
 
             <Dialog
                 visible={visible}
-                onHide={() => setVisible(false)}
+                onHide={() => (!isDeletingBoard ? setVisible(false) : null)}
                 breakpoints={{ "960px": "75vw", "640px": "100vw" }}
                 style={{ width: "50vw" }}
                 header="이 글을 삭제할까요?"
                 draggable={false}
+                closable={!isDeletingBoard}
                 footer={
                     <>
                         <Button
@@ -312,17 +413,23 @@ export default function PostDetail() {
                             label="취소"
                             severity="help"
                             onClick={() => setVisible(false)}
+                            disabled={isDeletingBoard}
                         />
                         <Button
                             type="button"
-                            label="삭제"
+                            label={isDeletingBoard ? "삭제 중..." : "삭제"}
                             severity="danger"
-                            onClick={(e) => deleteBoard(board?.id)}
+                            onClick={() => deleteBoard(board.id)}
+                            disabled={isDeletingBoard}
+                            loading={isDeletingBoard}
                         />
-                    </>
-                }
-            >
-                댓글 {comment.length}개도 함께 사라지고, 되돌릴 수 없어요.
+                    </>}>
+                댓글 {comments.length}개도 함께 사라지고, 되돌릴 수 없어요.
+                {deleteError && (
+                        <p role="alert" className="dialog-error">
+                             {deleteError}
+                        </p>
+                      )}
             </Dialog>
         </>
     );
