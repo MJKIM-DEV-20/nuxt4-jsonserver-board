@@ -37,30 +37,30 @@ export function PostList() {
   const handleNoticeChange = (value) => updateListParams({ notice: value });
   const handleSortChange = (value) => updateListParams({ sort: value });
 
-  // if (loading) {
-  //   return <PostListSkeleton rows={perPage} aria-busy="true" />;
-  // }
-  //
-  // if (error) {
-  //   return (
-  //       <ContentState
-  //           icon="pi-exclamation-triangle"
-  //           title="게시글을 불러오지 못했습니다"
-  //           description={error}
-  //           tone="danger"
-  //       />
-  //   );
-  // }
-  //
-  // if (data.length === 0) {
-  //   return (
-  //       <ContentState
-  //           icon="pi-inbox"
-  //           title="게시글이 없습니다"
-  //           description={query ? "검색 결과가 없어요." : "아직 등록된 게시글이 없어요."}
-  //       />
-  //   );
-  // }
+  if (loading) {
+    return <PostListSkeleton rows={perPage} aria-busy="true" />;
+  }
+
+  if (error) {
+    return (
+        <ContentState
+            icon="pi-exclamation-triangle"
+            title="게시글을 불러오지 못했습니다"
+            description={error}
+            tone="danger"
+        />
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+        <ContentState
+            icon="pi-inbox"
+            title="게시글이 없습니다"
+            description={query ? "검색 결과가 없어요." : "아직 등록된 게시글이 없어요."}
+        />
+    );
+  }
 
 
 console.log(data)
@@ -150,9 +150,9 @@ console.log(data)
                                         </h2>
                                       </div>
                                       <div className="post-item-meta">
-                              <span className="post-author">
-                                {list?.author}
-                              </span>
+                                        <span className="post-author">
+                                          {list?.author}
+                                        </span>
                                         <span className="sep" />
                                         <span>{list?.createdAt}</span>
                                         <span className="sep" />

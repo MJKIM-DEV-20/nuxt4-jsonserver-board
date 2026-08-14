@@ -113,7 +113,7 @@
       "title": "공지사항",
       "author": "관리자",
       "content": "공지사항 테스트입니다\n\n공지사항 1\n공지사항 2",
-      "views": 118,
+      "views": 119,
       "notice": true,
       "createdAt": "2026-08-10T15:00:00"
     },
@@ -122,7 +122,7 @@
       "title": "[공지사항]",
       "author": "관리자",
       "content": "공지사항입니다",
-      "views": 168,
+      "views": 169,
       "notice": true,
       "createdAt": "2026-08-10T15:00:00"
     },
@@ -140,7 +140,7 @@
       "title": "json 쿼리는 어떻게?? xptmadsmf;",
       "author": "테스트테스트",
       "content": "ㅇㅇㅇㅇㅇㅇㅇ",
-      "views": 8,
+      "views": 9,
       "createdAt": "2026-08-13T07:45:34.746Z",
       "notice": false
     },
@@ -167,7 +167,7 @@
       "title": "ddd",
       "author": "ddd",
       "content": "dddd",
-      "views": 1,
+      "views": 2,
       "createdAt": "2026-08-14T00:58:20.401Z",
       "notice": false
     },
@@ -176,9 +176,16 @@
       "title": "dedasda",
       "author": "asddas",
       "content": "dasdasdas",
-      "views": 1,
+      "views": 3,
       "createdAt": "2026-08-14T01:02:30.420Z",
       "notice": false
+    },
+    {
+      "id": "35b0",
+      "title": "글 수정",
+      "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
+      "content": "ㅇㅇㅇ",
+      "views": 2
     }
   ],
   "comments": [
@@ -266,6 +273,20 @@
       "author": "보",
       "content": "ddddd",
       "createdAt": "2026-08-14T00:58:13.974Z"
+    },
+    {
+      "id": "c34b",
+      "postId": "445f",
+      "author": "보",
+      "content": "ㅠㅠㅠ",
+      "createdAt": "2026-08-14T03:31:58.805Z"
+    },
+    {
+      "id": "5c97",
+      "postId": "16",
+      "author": "보",
+      "content": "확인했습니다",
+      "createdAt": "2026-08-14T03:37:10.026Z"
     }
   ]
 }

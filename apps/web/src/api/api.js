@@ -2,6 +2,21 @@ import {API_URL} from "./url.jsx";
 
 const BASE_URL = "http://localhost:4100";
 
+export async function request(path, options = {}) {
+    const res = await fetch(`${BASE_URL}${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...options,
+    });
+
+    if (!res.ok) {
+        const message = await res.text().catch(() => "");
+        throw new Error(message || `요청에 실패했습니다. (${res.status})`);
+    }
+
+    if (res.status === 204) return null; // DELETE 등 body 없는 응답
+    return res.json();
+}
+
 export async function fetchPosts({ page, perPage, query, notice, sort }) {
     const params = new URLSearchParams({ _page: page, _per_page: perPage });
     if (query) params.set("query", query);
@@ -13,11 +28,11 @@ export async function fetchPosts({ page, perPage, query, notice, sort }) {
     return res.json();
 }
 
-export async function fetchPost(id) {
-    const res = await fetch(`${BASE_URL}/posts/${id}`);
-    if (!res.ok) throw new Error("게시글을 찾을 수 없습니다.");
-    return res.json();
-}
+// export async function fetchPost(id) {
+//     const res = await fetch(`${BASE_URL}/posts/${id}`);
+//     if (!res.ok) throw new Error("게시글을 찾을 수 없습니다.");
+//     return res.json();
+// }
 
 
 export async function fetchAllPosts({ notice, sort }) {
@@ -78,8 +93,41 @@ export function attachCommentCounts(posts, countMap) {
     }));
 }
 
+// 게시글 작성
 
-//comment
+
+
+
+export function fetchPost(id) {
+    return request(`/posts/${id}`);
+}
+
+// export function createPost({ title, author, content }) {
+//     return request("/posts", {
+//         method: "POST",
+//         body: JSON.stringify({
+//             title,
+//             author,
+//             content,
+//             views: 0,
+//             createdAt: new Date().toISOString(),
+//             notice: false,
+//         }),
+//     });
+// }
+//
+// export function updatePost(id, { title, author, content }) {
+//     return request(`/posts/${id}`, {
+//         method: "PATCH",
+//         body: JSON.stringify({ title, author, content }),
+//     });
+// }
+
+
+
+
+
+//댓글
 
 export async function fetchAllComments() {
     const res = await fetch(`${BASE_URL}/comments`);
