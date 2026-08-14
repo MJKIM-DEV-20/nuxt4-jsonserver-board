@@ -1,4 +1,320 @@
 {
-  "posts": [],
-  "comments": []
+  "posts": [
+    {
+      "id": "1",
+      "author": "테스트 작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 19,
+      "createdAt": "2023-08-09T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "2",
+      "author": "테스트 수정수정수정",
+      "title": "수정수정수정",
+      "content": "ㅏㅣ마ㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏㅣㅏ\n\n1. 테스트\n2.테스트\n3. 테스트",
+      "views": 19,
+      "createdAt": "2025-08-09T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "3",
+      "author": "게시글 3 닉네임",
+      "title": "테스트(게시글 3 수정)",
+      "content": "## 게시글 3 ##\n\n# 게시글 3\n# 게시글 3\n## 게시글 3",
+      "views": 20,
+      "createdAt": "2025-08-01T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "4",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 10,
+      "createdAt": "2025-08-03T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "5",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 37,
+      "createdAt": "2025-03-09T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "6",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 23,
+      "createdAt": "2024-08-09T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "7",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 17,
+      "createdAt": "2026-08-07T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "8",
+      "author": "가나디",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 81,
+      "createdAt": "2026-08-01T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "9",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 82,
+      "createdAt": "2026-08-02T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "10",
+      "author": "작성자",
+      "title": "게시판 제목",
+      "content": "게시물 내용",
+      "views": 89,
+      "createdAt": "2026-08-09T15:00:00",
+      "notice": false
+    },
+    {
+      "id": "12",
+      "title": "dddd",
+      "author": "ddddddddddd",
+      "content": "dddddddddddddddddddddddd",
+      "views": 12,
+      "createdAt": "2026-08-08T14:00:00",
+      "notice": false
+    },
+    {
+      "id": "15",
+      "title": "공지사항",
+      "author": "관리자",
+      "content": "공지사항 테스트입니다\n\n공지사항 1\n공지사항 2",
+      "views": 119,
+      "notice": true,
+      "createdAt": "2026-08-10T15:00:00"
+    },
+    {
+      "id": "16",
+      "title": "[공지사항]",
+      "author": "관리자",
+      "content": "공지사항입니다",
+      "views": 170,
+      "notice": true,
+      "createdAt": "2026-08-10T15:00:00"
+    },
+    {
+      "id": "33a4",
+      "title": "ㅇ",
+      "author": "ㅇㅇㅇ",
+      "content": "ㅇㅇㅇ",
+      "views": 3,
+      "createdAt": "2026-08-13T07:32:13.743Z",
+      "notice": false
+    },
+    {
+      "id": "445f",
+      "title": "json 쿼리는 어떻게?? xptmadsmf;",
+      "author": "테스트테스트",
+      "content": "ㅇㅇㅇㅇㅇㅇㅇ",
+      "views": 9,
+      "createdAt": "2026-08-13T07:45:34.746Z",
+      "notice": false
+    },
+    {
+      "id": "c66a",
+      "title": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+      "author": "ddd",
+      "content": "dddd",
+      "views": 5,
+      "createdAt": "2026-08-14T00:46:08.763Z",
+      "notice": false
+    },
+    {
+      "id": "2ddd",
+      "title": "dd",
+      "author": "dd",
+      "content": "ddd",
+      "views": 5,
+      "createdAt": "2026-08-14T00:46:17.129Z",
+      "notice": false
+    },
+    {
+      "id": "13c3",
+      "title": "ddd",
+      "author": "ddd",
+      "content": "dddd",
+      "views": 3,
+      "createdAt": "2026-08-14T00:58:20.401Z",
+      "notice": false
+    },
+    {
+      "id": "a546",
+      "title": "dedasda",
+      "author": "asddas",
+      "content": "dasdasdas",
+      "views": 7,
+      "createdAt": "2026-08-14T01:02:30.420Z",
+      "notice": false
+    },
+    {
+      "id": "35b0",
+      "title": "글 수정",
+      "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
+      "content": "ㅇㅇㅇ",
+      "createdAt": "2026-08-14T01:02:30.420Z",
+      "views": 10
+    },
+    {
+      "id": "0e4e",
+      "title": "작성",
+      "author": "닞네임 테스트",
+      "content": "나님ㄹㅇㅇㄺㅎㄱㄷㅎㄱㅎㄱㅎㄱㅀㅇ",
+      "createdAt": "2026-08-14T01:02:30.420Z",
+      "views": 2
+    }
+  ],
+  "comments": [
+    {
+      "id": "c1",
+      "postId": "1",
+      "author": "닉네임",
+      "content": "댓글 내용",
+      "createdAt": "2026-08-11T13:00:00Z"
+    },
+    {
+      "id": "18f5",
+      "postId": "1",
+      "author": "참치잠만보",
+      "content": "ㄴㅇㄴㅇㅇㅇㅇ",
+      "createdAt": "2026-08-11T12:03:47.747Z"
+    },
+    {
+      "id": "8268",
+      "postId": "3",
+      "author": "참치잠만보",
+      "content": "ㅊㅊㅊㅊㅊㅇㅁㄴ람;나임반ㅇ;ㅀㅎㄷㄱㅎㅎㄷㄹㅀㅇㅎㅎㄹ",
+      "createdAt": "2026-08-11T12:04:12.328Z",
+      "comment": ""
+    },
+    {
+      "id": "af75",
+      "postId": "9",
+      "author": "참치잠만보",
+      "content": "해결방법 태수투",
+      "createdAt": "2026-08-11T12:07:43.556Z"
+    },
+    {
+      "id": "c251",
+      "postId": "5",
+      "author": "보",
+      "content": " 테스트",
+      "createdAt": "2026-08-12T00:23:40.622Z"
+    },
+    {
+      "id": "2b5c",
+      "postId": "2",
+      "author": "보",
+      "content": "xxxxcdkcmacm,ams.,cm,.asm",
+      "createdAt": "2026-08-12T05:14:54.035Z"
+    },
+    {
+      "id": "e5cb",
+      "postId": "2",
+      "author": "보",
+      "content": "siandsfklasjdklasjldjqasjfdiq",
+      "createdAt": "2026-08-12T05:15:00.463Z"
+    },
+    {
+      "id": "f14f",
+      "postId": "10",
+      "author": "보",
+      "content": "테스트테스트\n\n피카츄 라이튜\n",
+      "createdAt": "2026-08-12T06:19:47.421Z"
+    },
+    {
+      "id": "9c1e",
+      "postId": "15",
+      "author": "보",
+      "content": "sssss",
+      "createdAt": "2026-08-13T06:21:31.612Z"
+    },
+    {
+      "id": "f9f8",
+      "postId": "2ddd",
+      "author": "보",
+      "content": "eoo",
+      "createdAt": "2026-08-14T00:49:29.407Z"
+    },
+    {
+      "id": "5501",
+      "postId": "2ddd",
+      "author": "보",
+      "content": "ddddd",
+      "createdAt": "2026-08-14T00:58:13.974Z"
+    },
+    {
+      "id": "c34b",
+      "postId": "445f",
+      "author": "보",
+      "content": "ㅠㅠㅠ",
+      "createdAt": "2026-08-14T03:31:58.805Z"
+    },
+    {
+      "id": "5c97",
+      "postId": "16",
+      "author": "보",
+      "content": "확인했습니다",
+      "createdAt": "2026-08-14T03:37:10.026Z"
+    },
+    {
+      "id": "24e3",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㄹㅇㄹㄹ",
+      "createdAt": "2026-08-14T04:00:05.477Z"
+    },
+    {
+      "id": "bbaa",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㄹㄹ",
+      "createdAt": "2026-08-14T04:00:13.560Z"
+    },
+    {
+      "id": "9c7a",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㅎㅎㅎ",
+      "createdAt": "2026-08-14T04:00:19.396Z"
+    },
+    {
+      "id": "dd20",
+      "postId": "35b0",
+      "author": "보",
+      "content": "작성 테스ㅡㅌㅊ",
+      "createdAt": "2026-08-14T04:05:50.739Z"
+    },
+    {
+      "id": "35a4",
+      "postId": "c66a",
+      "author": "보",
+      "content": "댓글댓글",
+      "createdAt": "2026-08-14T05:04:22.504Z"
+    }
+  ]
 }
