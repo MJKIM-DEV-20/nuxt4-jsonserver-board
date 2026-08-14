@@ -8,6 +8,7 @@ import {
     ContentState,
     CommentSkeleton,
 } from "../components/ContentState.jsx";
+import {toastRef} from "../App.jsx";
 
 export default function PostDetail() {
     const { id } = useParams();
@@ -23,6 +24,7 @@ export default function PostDetail() {
     const [comments, setComments] = useState([]);
     const [commentsLoading, setCommentsLoading] = useState(true);
     const [commentsError, setCommentsError] = useState(null);
+    const commentRef = useRef(null);
 
     const [replyValue, setReplyValue] = useState("");
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
@@ -101,7 +103,12 @@ export default function PostDetail() {
         if (isSubmittingComment) return;
 
         const value = replyValue.trim();
-        if (!value) return;
+        if (!value.trim()) {
+                 setCommentsError("댓글 내용을 입력해주세요.");
+                 commentRef.current?.focus();
+                 return;
+               }
+           setCommentsError(null);
 
         setIsSubmittingComment(true);
         try {
@@ -116,8 +123,14 @@ export default function PostDetail() {
                 }),
             });
             if (res.ok) {
-                setReplyValue("");
                 await refreshComments();
+                setReplyValue("");
+                toastRef.current?.show({
+                    severity: "success",
+                    summary: "댓글 등록 완료",
+                    detail: "댓글이 등록되었습니다.",
+                    life: 1500,
+                });
             }
         } finally {
             setIsSubmittingComment(false);
@@ -147,6 +160,12 @@ export default function PostDetail() {
             });
             if (res.ok) {
                 setEditingId(null);
+                toastRef.current?.show({
+                    severity: "success",
+                    summary: "게시글 수정 완료",
+                    detail: "게시글 수정완료 되었습니다.",
+                    life: 1500,
+                });
                 await refreshComments();
             }
         } finally {
@@ -384,9 +403,20 @@ export default function PostDetail() {
                         rows={3}
                         placeholder="해결 방법이나 참고 자료를 알려주세요"
                         value={replyValue}
-                        onChange={(e) => setReplyValue(e.target.value)}
+                        ref={commentRef}
+                        onChange={(e) => {
+                            setReplyValue(e.target.value);
+                                   if (commentsError) setCommentsError(null);
+                                 }}
                         disabled={isSubmittingComment}
+                        aria-invalid={Boolean(commentsError)}
+                        aria-describedby={commentsError ? "comment-error" : undefined}
                     />
+                    {commentsError && (
+                        <p id="comment-error" role="alert" className="dialog-error">
+                            {commentsError}
+                        </p>
+                    )}
                     <div className="row-end">
                         <Button
                             type="submit"

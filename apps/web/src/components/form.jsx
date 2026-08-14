@@ -6,8 +6,11 @@ import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContentState } from "./ContentState";
+import { Toast } from "primereact/toast";
 
-export default function PostsForm({ initialData, onSubmit, onCancel }) {
+
+
+export default function PostsForm({ initialData, onSubmit, onCancel ,submitError}) {
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [author, setAuthor] = useState(initialData?.author ?? "");
   const [content, setContent] = useState(initialData?.content ?? "");
@@ -22,7 +25,6 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (!isDirty) return;
@@ -84,14 +86,21 @@ export default function PostsForm({ initialData, onSubmit, onCancel }) {
         <section className="page-intro page-intro--compact">
           <div>
             <h1 className="page-title">
-              {initialData ? "새 글 작성하기" : "게시글 수정하기"}
+              {initialData ? "게시글 수정하기" : "새글 작성하기"}
             </h1>
             <p className="page-description">
               질문이나 해결 방법을 작성하면 목록에 바로 보여요.
             </p>
           </div>
         </section>
-
+        {submitError && (
+            <ContentState
+                icon="pi-exclamation-triangle"
+                title="저장에 실패했습니다"
+                description={submitError}
+                tone="danger"
+            />
+        )}
         <div className="write-layout">
           <form className="card form-card" onSubmit={handleSubmit}>
             <div className="field" >
