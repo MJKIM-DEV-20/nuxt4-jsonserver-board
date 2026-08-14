@@ -7,7 +7,7 @@ export function useComments(postId) {
     const [comments, setComments] = useState([]);
     const [commentsLoading, setCommentsLoading] = useState(true);
     const [commentsError, setCommentsError] = useState(null);
-
+    const [commentDeleteError, setCommentDeleteError] = useState(null);
     const [replyValue, setReplyValue] = useState("");
     const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
@@ -80,9 +80,12 @@ export function useComments(postId) {
         async (commentId) => {
             if (deletingIds.has(commentId)) return;
             setDeletingIds((prev) => new Set(prev).add(commentId));
+            setCommentDeleteError(null);
             try {
                 await deleteComment(commentId);
                 await refresh();
+            } catch {
+                setCommentDeleteError("댓글 삭제에 실패했습니다.");
             } finally {
                 setDeletingIds((prev) => {
                     const next = new Set(prev);

@@ -5,6 +5,8 @@ import PostListSkeleton from "../components/ContentState.jsx";
 import { ContentState } from "../components/ContentState.jsx";
 import {useList} from "../hooks/useList.jsx";
 import {fetchPost} from "../api/api.js";
+import {detailDate,TotalDate} from "../util/util.jsx";
+
 
 export function PostList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,8 +64,6 @@ export function PostList() {
     );
   }
 
-
-console.log(data)
 
   return (
       <>
@@ -154,7 +154,7 @@ console.log(data)
                                           {list?.author}
                                         </span>
                                         <span className="sep" />
-                                        <span>{list?.createdAt}</span>
+                                        <span>{detailDate(list?.createdAt)}</span>
                                         <span className="sep" />
                                         <span>조회 {list?.views}</span>
                                       </div>
@@ -180,7 +180,7 @@ console.log(data)
                                 {list?.author}
                               </span>
                                         <span className="sep" />
-                                        <span>{list?.createdAt}</span>
+                                        <span>{detailDate(list?.createdAt)}</span>
                                         <span className="sep" />
                                         <span>조회 {list?.views}</span>
                                       </div>
@@ -205,39 +205,46 @@ console.log(data)
         <div className="pager" aria-label="페이지 이동 UI">
           <div>
           <span className="is-static" aria-label="이전 페이지">
-          {/*  <button*/}
-          {/*      onClick={() => handlePagination(currentPage - 1)}*/}
-          {/*      disabled={currentPage <= 1}>*/}
-          {/*    <i className="pi pi-chevron-left" aria-hidden="true"></i>*/}
-          {/*  </button>*/}
-          {/*</span>*/}
-          {/*  <span className="is-static" aria-current="page">*/}
-          {/*  {currentPage}*/}
-          {/*</span>*/}
+        <i
+            className="pi pi-chevron-left page-nav-icon"
+            role="button"
+            tabIndex={page <= 1 ? -1 : 0}
+            aria-disabled={page <= 1}
+            aria-label="이전 페이지"
+            onClick={() => {
+              if (page <= 1) return;
+              handlePagination(page - 1);
+            }}
+            onKeyDown={(e) => {
+              if (page <= 1) return;
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handlePagination(page - 1);
+              }
+            }}/>
 
-          {/*  /!* 다음 버튼 *!/*/}
-          {/*  <span className="is-static" aria-label="다음 페이지">*/}
-          {/*  <button*/}
-          {/*      onClick={() => handlePagination(currentPage + 1)}*/}
-          {/*      disabled={currentPage >= totalPages}*/}
-          {/*  >*/}
-          {/*    <i className="pi pi-chevron-right" aria-hidden="true" />*/}
-          {/*  </button>*/}
-            <button disabled={page <= 1} onClick={() => handlePagination(page - 1)}>
-          <i className="pi pi-chevron-left" aria-hidden="true"></i>
-        </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                    key={p}
-                    aria-current={p === page ? "page" : undefined}
-                    onClick={() => handlePagination(p)}
-                >
-                  {p}
-                </button>
-            ))}
-            <button disabled={page >= totalPages} onClick={() => handlePagination(page + 1)}>
-          <i className="pi pi-chevron-right" aria-hidden="true" />
-        </button>
+            <span className="page-current" aria-current="page">
+              {page}
+            </span>
+
+            <i
+                className="pi pi-chevron-right page-nav-icon"
+                role="button"
+                tabIndex={page >= totalPages ? -1 : 0}
+                aria-disabled={page >= totalPages}
+                aria-label="다음 페이지"
+                onClick={() => {
+                  if (page >= totalPages) return;
+                  handlePagination(page + 1);
+                }}
+                onKeyDown={(e) => {
+                  if (page >= totalPages) return;
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault(); // 스페이스바가 페이지 스크롤시키는 거 막기
+                    handlePagination(page + 1);
+                  }
+                }}
+            />
           </span>
           </div>
         </div>

@@ -64,7 +64,12 @@ export async function createPost(payload) {
     const res = await fetch(`${BASE_URL}/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+            ...payload,
+            views: 0,
+            createdAt: new Date().toISOString(),
+            notice: false,
+        }),
     });
     if (!res.ok) throw new Error("게시글 작성에 실패했습니다.");
     return res.json();

@@ -1,4 +1,4 @@
-// hooks/useList.js (postlist)
+// 게시글 리스트 hook
 import { useState, useEffect } from "react";
 import { getPostList,fetchAllComments, countCommentsByPostId,attachCommentCounts } from "../api/api.js";
 

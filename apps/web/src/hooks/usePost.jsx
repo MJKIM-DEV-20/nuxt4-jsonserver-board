@@ -41,6 +41,7 @@ export function usePost(id) {
         };
     }, [id]);
 
+
     const removeBoard = useCallback(async () => {
         if (isDeletingBoard) return false;
         setIsDeletingBoard(true);
@@ -55,6 +56,6 @@ export function usePost(id) {
             setIsDeletingBoard(false);
         }
     }, [id, isDeletingBoard]);
-
-    return { board, boardLoading, boardError, isDeletingBoard, deleteError, removeBoard };
+    const clearDeleteError = useCallback(() => setDeleteError(null), []);
+    return { board, boardLoading, boardError, isDeletingBoard, deleteError, removeBoard,clearDeleteError };
 }

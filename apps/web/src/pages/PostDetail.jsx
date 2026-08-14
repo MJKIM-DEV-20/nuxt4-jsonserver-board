@@ -6,6 +6,8 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { ArticleSkeleton, ContentState, CommentSkeleton } from "../components/ContentState.jsx";
 import { usePost } from "../hooks/usePost";
 import { useComments } from "../hooks/useComment";
+import {detailDate,TotalDate} from "../util/util.jsx";
+
 
 export default function PostDetail() {
     const { id } = useParams();
@@ -13,7 +15,7 @@ export default function PostDetail() {
     const commentRef = useRef(null);
     const [visible, setVisible] = useState(false);
 
-    const { board, boardLoading, boardError, isDeletingBoard, deleteError, removeBoard } = usePost(id);
+    const { board, boardLoading, boardError, isDeletingBoard, deleteError, removeBoard,clearDeleteError } = usePost(id);
     const {
         comments, commentsLoading, commentsError, setCommentsError,
         replyValue, setReplyValue, isSubmittingComment, submitReply,
@@ -85,7 +87,7 @@ export default function PostDetail() {
             </span>
                         <div>
                             <div className="author-name">{board.author}</div>
-                            <div className="author-date">{board.createdAt}</div>
+                            <div className="author-date">{TotalDate(board.createdAt)}</div>
                         </div>
                     </div>
                     <div className="stat-row">
@@ -112,9 +114,9 @@ export default function PostDetail() {
                         icon="pi pi-trash"
                         className="is-static"
                         onClick={() => {
-                                   setDeleteError(null);
-                                   setVisible(true);
-                                 }}
+                            clearDeleteError();
+                            setVisible(true);
+                        }}
                     />
                     <span
                         className="p-button p-button-secondary is-static"
@@ -162,8 +164,8 @@ export default function PostDetail() {
                                     <div className="author-name">
                                         {comment.author}
                                         <span className="author-date comment-when">
-                      {comment.createdAt}
-                    </span>
+                                          {detailDate(comment.createdAt)}
+                                        </span>
                                     </div>
 
                                     {editingId === comment.id ? (
@@ -205,7 +207,7 @@ export default function PostDetail() {
                                             <p className="comment-text">{comment.content}</p>
                                             <button
                                                 className="comment-button"
-                                                onClick={() => deleteComment(comment.id)}
+                                                onClick={() => removeComment(comment.id)}
                                                 disabled={deletingIds.has(comment.id)}
                                             >
                                                 {deletingIds.has(comment.id)
@@ -281,7 +283,7 @@ export default function PostDetail() {
                             type="button"
                             label={isDeletingBoard ? "삭제 중..." : "삭제"}
                             severity="danger"
-                            onClick={() => deleteBoard(board.id)}
+                            onClick={() => handleDeleteBoard(board.id)}
                             disabled={isDeletingBoard}
                             loading={isDeletingBoard}
                         />
