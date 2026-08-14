@@ -1,10 +1,10 @@
 {
-  "name": "react-jsonserver-board",
+  "name": "nuxt4-jsonserver-board",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently -n API,WEB -c auto --kill-others \"pnpm -C apps/api dev\" \"pnpm -C apps/web dev\"",
+    "dev": "concurrently -n API,WEB -c auto \"pnpm -C apps/api dev\" \"pnpm -C apps/web dev\"",
     "dev:api": "pnpm -C apps/api dev",
     "dev:web": "pnpm -C apps/web dev"
   },
@@ -14,11 +14,5 @@
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
     "concurrently": "^9.2.0"
-  },
-  "dependencies": {
-    "axios": "^1.19.0",
-    "react": "^19.2.8",
-    "react-router": "^8.3.0",
-    "react-router-dom": "^7.18.2"
   }
 }
