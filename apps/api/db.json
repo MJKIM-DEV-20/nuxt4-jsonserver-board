@@ -137,10 +137,10 @@
     },
     {
       "id": "c66a",
-      "title": "dedd",
+      "title": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
       "author": "ddd",
       "content": "dddd",
-      "views": 2,
+      "views": 5,
       "createdAt": "2026-08-14T00:46:08.763Z",
       "notice": false
     },
@@ -177,7 +177,7 @@
       "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
       "content": "ㅇㅇㅇ",
       "createdAt": "2026-08-14T01:02:30.420Z",
-      "views": 9
+      "views": 10
     },
     {
       "id": "0e4e",
@@ -308,6 +308,13 @@
       "author": "보",
       "content": "작성 테스ㅡㅌㅊ",
       "createdAt": "2026-08-14T04:05:50.739Z"
+    },
+    {
+      "id": "35a4",
+      "postId": "c66a",
+      "author": "보",
+      "content": "댓글댓글",
+      "createdAt": "2026-08-14T05:04:22.504Z"
     }
   ]
 }
