@@ -3,144 +3,67 @@ import { data, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import PostListSkeleton from "../components/ContentState.jsx";
 import { ContentState } from "../components/ContentState.jsx";
+import {useList} from "../hooks/useList.jsx";
+import {fetchPost} from "../api/api.js";
 
 export function PostList() {
-  const [boardList, setBoardList] = useState([]);
-  const [isloading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [totalCount, setTotalCount] = useState(0);
-  const currentPage = Number(searchParams.get("_page")) || 1;
-  const postPerPage = Number(searchParams.get("_limit")) || 10;
-  const totalPages = Math.ceil(totalCount / postPerPage);
-  const [error, setError] = useState(null);
-  const query = searchParams.get("query") || "";
-  const notice = searchParams.get("notice") || "all";
-  const sort = searchParams.get("sort") || "latest";
 
-  async function getList(page, limit, query, notice, sort) {
-    const params = new URLSearchParams();
+  const page = Number(searchParams.get("_page") ?? 1);
+  const perPage = Number(searchParams.get("_per_page") ?? 10);
+  const query = searchParams.get("query") ?? "";
+  const notice = searchParams.get("notice") ?? "all";
+  const sort = searchParams.get("sort") ?? "latest";
 
-    if (notice !== "all") {
-      params.set("notice", notice);
-    }
+  const { data, total, loading, error } = useList({ page, perPage, query, notice, sort });
 
-    if (sort === "view") {
-      params.set("_sort", "-views");
-    } else {
-      params.set("_sort", "-createdAt");
-    }
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
 
-    if (query) {
-      const response = await fetch(
-          `http://localhost:4100/posts?${params.toString()}`,
-      );
-      let data = await response.json();
-
-      const q = query.toLowerCase();
-      data = data.filter((post) =>
-          Object.values(post).some((v) => String(v).toLowerCase().includes(q)),
-      );
-
-      const total = data.length;
-      const start = (page - 1) * limit;
-      const paged = data.slice(start, start + limit);
-      return { data: paged, total };
-    }
-
-    params.set("_page", String(page));
-    params.set("_per_page", String(limit));
-    const response = await fetch(
-        `http://localhost:4100/posts?${params.toString()}`,
-    );
-    const raw = await response.json();
-
-    return { data: raw.data, total: raw.items };
-  }
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function fetchList() {
-      setLoading(true);
-      +   setError(null);
-      try {
-        const resp = await getListWithCommentCounts(
-            currentPage,
-            postPerPage,
-            query,
-            notice,
-            sort,
-        );
-        if (!ignore) {
-          setBoardList(resp.data);
-          setTotalCount(resp.total);
-        }
-          } catch (e) {
-            if (!ignore) setError("게시글을 불러오지 못했습니다.");
-      } finally {
-        if (!ignore) setLoading(false);
-      }
-    }
-
-    fetchList();
-    return () => {
-      ignore = true;
-    };
-  }, [currentPage, postPerPage, query, notice, sort]);
-
-  async function getListWithCommentCounts(page, limit, query, notice, sort) {
-    const { data, total } = await getList(page, limit, query, notice, sort);
-
-    const commentsRes = await fetch(`http://localhost:4100/comments`);
-    const allComments = await commentsRes.json();
-
-    const countMap = allComments.reduce((acc, c) => {
-      acc[c.postId] = (acc[c.postId] || 0) + 1;
-      return acc;
-    }, {});
-
-    const withCounts = data.map((post) => ({
-      ...post,
-      commentCount: countMap[post.id] || 0,
-    }));
-
-    return { data: withCounts, total };
+  function updateListParams(overrides) {
+    setSearchParams({
+      query,
+      notice,
+      sort,
+      _page: 1,
+      _per_page: perPage,
+      ...overrides,
+    });
   }
 
   const handlePagination = (pageNumber) => {
-    console.log(pageNumber);
-    console.log(totalPages);
-    console.log(totalCount);
     if (pageNumber < 1 || pageNumber > totalPages) return;
-
-    setSearchParams({
-      query,
-      notice,
-      sort,
-      _page: String(pageNumber),
-      _limit: String(postPerPage),
-    });
+    updateListParams({ _page: pageNumber });
   };
+  const handleNoticeChange = (value) => updateListParams({ notice: value });
+  const handleSortChange = (value) => updateListParams({ sort: value });
 
-  const noticeTab = (value) => {
-    setSearchParams({
-      query,
-      notice: value,
-      sort,
-      _page: 1,
-      _limit: postPerPage,
-    });
-  };
+  // if (loading) {
+  //   return <PostListSkeleton rows={perPage} aria-busy="true" />;
+  // }
+  //
+  // if (error) {
+  //   return (
+  //       <ContentState
+  //           icon="pi-exclamation-triangle"
+  //           title="게시글을 불러오지 못했습니다"
+  //           description={error}
+  //           tone="danger"
+  //       />
+  //   );
+  // }
+  //
+  // if (data.length === 0) {
+  //   return (
+  //       <ContentState
+  //           icon="pi-inbox"
+  //           title="게시글이 없습니다"
+  //           description={query ? "검색 결과가 없어요." : "아직 등록된 게시글이 없어요."}
+  //       />
+  //   );
+  // }
 
-  const handlebars = (value) => {
-    setSearchParams({
-      query,
-      notice,
-      sort: value,
-      _page: 1,
-      _limit: postPerPage,
-    });
-  };
+
+console.log(data)
 
   return (
       <>
@@ -158,11 +81,9 @@ export function PostList() {
         <section className="board-panel" aria-label="게시글 목록">
           <div className="board-toolbar">
             <div className="tabs" role="group" aria-label="게시글 필터">
-              {/*<button type="button" className="tab is-active" aria-pressed="true">전체</button>*/}
-              {/*<button type="button" className="tab" aria-pressed="false">공지</button>*/}
               <button
                   type="button"
-                  onClick={() => noticeTab("all")}
+                  onClick={() => handleNoticeChange("all")}
                   className="tab"
                   aria-pressed="true"
               >
@@ -170,7 +91,7 @@ export function PostList() {
               </button>
               <button
                   type="button"
-                  onClick={() => noticeTab("true")}
+                  onClick={() => handleNoticeChange("true")}
                   className="tab"
                   aria-pressed="true"
               >
@@ -178,10 +99,10 @@ export function PostList() {
               </button>
             </div>
             <div className="toolbar-meta">
-              <p className="result-count">{totalCount}개의 글</p>
+              <p className="result-count">{total}개의 글</p>
               <label className="sort-control">
                 <span className="sr-only">게시글 정렬</span>
-                <select value={sort} onChange={(e) => handlebars(e.target.value)}>
+                <select value={sort} onChange={(e) => handleSortChange(e.target.value)}>
                   <option value="latest">최신순</option>
                   <option value="view">조회순</option>
                 </select>
@@ -192,7 +113,7 @@ export function PostList() {
 
           <div className="card card--list">
             <ul className="post-list">
-              {isloading ? (
+              {loading ? (
                   <PostListSkeleton />
               ) : error ? (
                   <ContentState
@@ -201,7 +122,7 @@ export function PostList() {
                       description={error}
                       tone="danger"
                   />
-              ) : boardList.length === 0 ? (
+              ) : data.length === 0 ? (
                   <ContentState
                       icon="pi-inbox"
                       title="검색 결과가 없습니다"
@@ -213,8 +134,7 @@ export function PostList() {
                   />
               ) : (
                   <section className="board-panel" aria-label="게시글 목록}">
-                    {boardList &&
-                        boardList?.map((list, index) => (
+                    {data && data?.map((list, index) => (
                             <NavLink
                                 to={`/posts/${list.id}`}
                                 key={index}
@@ -285,25 +205,39 @@ export function PostList() {
         <div className="pager" aria-label="페이지 이동 UI">
           <div>
           <span className="is-static" aria-label="이전 페이지">
-            <button
-                onClick={() => handlePagination(currentPage - 1)}
-                disabled={currentPage <= 1}
-            >
-              <i className="pi pi-chevron-left" aria-hidden="true"></i>
-            </button>
-          </span>
-            <span className="is-static" aria-current="page">
-            {currentPage}
-          </span>
+          {/*  <button*/}
+          {/*      onClick={() => handlePagination(currentPage - 1)}*/}
+          {/*      disabled={currentPage <= 1}>*/}
+          {/*    <i className="pi pi-chevron-left" aria-hidden="true"></i>*/}
+          {/*  </button>*/}
+          {/*</span>*/}
+          {/*  <span className="is-static" aria-current="page">*/}
+          {/*  {currentPage}*/}
+          {/*</span>*/}
 
-            {/* 다음 버튼 */}
-            <span className="is-static" aria-label="다음 페이지">
-            <button
-                onClick={() => handlePagination(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-            >
-              <i className="pi pi-chevron-right" aria-hidden="true" />
-            </button>
+          {/*  /!* 다음 버튼 *!/*/}
+          {/*  <span className="is-static" aria-label="다음 페이지">*/}
+          {/*  <button*/}
+          {/*      onClick={() => handlePagination(currentPage + 1)}*/}
+          {/*      disabled={currentPage >= totalPages}*/}
+          {/*  >*/}
+          {/*    <i className="pi pi-chevron-right" aria-hidden="true" />*/}
+          {/*  </button>*/}
+            <button disabled={page <= 1} onClick={() => handlePagination(page - 1)}>
+          <i className="pi pi-chevron-left" aria-hidden="true"></i>
+        </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <button
+                    key={p}
+                    aria-current={p === page ? "page" : undefined}
+                    onClick={() => handlePagination(p)}
+                >
+                  {p}
+                </button>
+            ))}
+            <button disabled={page >= totalPages} onClick={() => handlePagination(page + 1)}>
+          <i className="pi pi-chevron-right" aria-hidden="true" />
+        </button>
           </span>
           </div>
         </div>
