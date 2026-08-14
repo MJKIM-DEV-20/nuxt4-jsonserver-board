@@ -102,6 +102,22 @@ export function fetchPost(id) {
     return request(`/posts/${id}`);
 }
 
+
+export function incrementView(id, currentViews) {
+    return request(`/posts/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ views: currentViews + 1 }),
+    });
+}
+
+// export function deletePost(id) {
+//     return request(`/posts/${id}`, { method: "DELETE" });
+// }
+
+
+
+
+
 // export function createPost({ title, author, content }) {
 //     return request("/posts", {
 //         method: "POST",
@@ -140,5 +156,33 @@ export function countCommentsByPostId(comments) {
         acc[c.postId] = (acc[c.postId] || 0) + 1;
         return acc;
     }, {});
+}
+
+
+export function fetchComments(postId) {
+    return request(`/comments?postId=${postId}`);
+}
+
+export function createComment(postId, content) {
+    return request("/comments", {
+        method: "POST",
+        body: JSON.stringify({
+            postId,
+            author: "보",
+            content,
+            createdAt: new Date().toISOString(),
+        }),
+    });
+}
+
+export function updateComment(commentId, content) {
+    return request(`/comments/${commentId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ content }),
+    });
+}
+
+export function deleteComment(commentId) {
+    return request(`/comments/${commentId}`, { method: "DELETE" });
 }
 

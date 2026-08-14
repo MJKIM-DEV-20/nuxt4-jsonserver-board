@@ -1,215 +1,47 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import {
-    ArticleSkeleton,
-    ContentState,
-    CommentSkeleton,
-} from "../components/ContentState.jsx";
-import {toastRef} from "../App.jsx";
+import { ArticleSkeleton, ContentState, CommentSkeleton } from "../components/ContentState.jsx";
+import { usePost } from "../hooks/usePost";
+import { useComments } from "../hooks/useComment";
 
 export default function PostDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-
-    const [board, setBoard] = useState(null);
-    const [boardLoading, setBoardLoading] = useState(true);
-    const [boardError, setBoardError] = useState(null);
-
-    const [visible, setVisible] = useState(false);
-    const [isDeletingBoard, setIsDeletingBoard] = useState(false);
-
-    const [comments, setComments] = useState([]);
-    const [commentsLoading, setCommentsLoading] = useState(true);
-    const [commentsError, setCommentsError] = useState(null);
     const commentRef = useRef(null);
+    const [visible, setVisible] = useState(false);
 
-    const [replyValue, setReplyValue] = useState("");
-    const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+    const { board, boardLoading, boardError, isDeletingBoard, deleteError, removeBoard } = usePost(id);
+    const {
+        comments, commentsLoading, commentsError, setCommentsError,
+        replyValue, setReplyValue, isSubmittingComment, submitReply,
+        editingId, editValue, setEditValue, isEditSubmitting, startEdit, cancelEdit, submitEdit,
+        deletingIds, removeComment,
+    } = useComments(id);
 
-    const [editingId, setEditingId] = useState(null);
-    const [editValue, setEditValue] = useState("");
-    const [isEditSubmitting, setIsEditSubmitting] = useState(false);
-
-    const [deletingIds, setDeletingIds] = useState(new Set());
-    const [deleteError, setDeleteError] = useState(null);
-
-
-    useEffect(() => {
-        let ignore = false;
-
-        async function getBoardDetail() {
-            setBoardLoading(true);
-            setBoardError(null);
-            try {
-                const resp = await fetch(`http://localhost:4100/posts/${id}`);
-
-                if (resp.status === 404) {
-                    if (!ignore) setBoardError("존재하지 않는 게시글입니다.");
-                    return;
-                }
-                if (!resp.ok) {
-                    if (!ignore) setBoardError("게시글을 불러오지 못했습니다.");
-                    return;
-                }
-
-                const data = await resp.json();
-                if (ignore) return;
-
-                try {
-                    await fetch(`http://localhost:4100/posts/${id}`, {
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ views: data.views + 1 }),
-                    });
-                } catch {}
-
-                if (!ignore) setBoard({ ...data, views: data.views + 1 });
-            } catch (e) {
-                if (!ignore) setBoardError("네트워크 오류가 발생했습니다.");
-            } finally {
-                if (!ignore) setBoardLoading(false);
-            }
-        }
-
-        getBoardDetail();
-        return () => {
-            ignore = true;
-        };
-    }, [id]);
-
-    const refreshComments = useCallback(async () => {
-        setCommentsLoading(true);
-        setCommentsError(null);
-        try {
-            const res = await fetch(`http://localhost:4100/comments?postId=${id}`);
-            if (!res.ok) throw new Error("FAILED");
-            const data = await res.json();
-            setComments(data);
-        } catch (e) {
-            setCommentsError("댓글을 불러오지 못했습니다.");
-        } finally {
-            setCommentsLoading(false);
-        }
-    }, [id]);
-
-    useEffect(() => {
-        refreshComments();
-    }, [refreshComments]);
-    const createReply = async (e) => {
+    const handleCreateReply = (e) => {
         e.preventDefault();
-        if (isSubmittingComment) return;
-
         const value = replyValue.trim();
-        if (!value.trim()) {
-                 setCommentsError("댓글 내용을 입력해주세요.");
-                 commentRef.current?.focus();
-                 return;
-               }
-           setCommentsError(null);
-
-        setIsSubmittingComment(true);
-        try {
-            const res = await fetch(`http://localhost:4100/comments`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    postId: id,
-                    author: "보",
-                    content: value,
-                    createdAt: new Date().toISOString(),
-                }),
-            });
-            if (res.ok) {
-                await refreshComments();
-                setReplyValue("");
-                toastRef.current?.show({
-                    severity: "success",
-                    summary: "댓글 등록 완료",
-                    detail: "댓글이 등록되었습니다.",
-                    life: 1500,
-                });
-            }
-        } finally {
-            setIsSubmittingComment(false);
+        if (!value) {
+            setCommentsError("댓글 내용을 입력해주세요.");
+            commentRef.current?.focus();
+            return;
         }
+        setCommentsError(null);
+        submitReply(value);
     };
 
-    const startEdit = (comment) => {
-        setEditingId(comment.id);
-        setEditValue(comment.content);
+    const handleDeleteBoard = async () => {
+        const ok = await removeBoard();
+        if (ok) navigate("/", { replace: true });
     };
 
-    const cancelEdit = () => {
-        setEditingId(null);
-        setEditValue("");
-    };
+    if (boardLoading) return <ArticleSkeleton />;
+    if (boardError) return <ContentState icon="pi-exclamation-triangle" title="게시글을 불러올 수 없습니다" description={boardError} tone="danger" />;
+    if (!board) return <ContentState icon="pi-inbox" title="게시글이 없습니다" description="삭제되었거나 존재하지 않는 게시글입니다." />;
 
-    const submitEdit = async (e, commentId) => {
-        e.preventDefault();
-        if (isEditSubmitting) return;
-
-        setIsEditSubmitting(true);
-        try {
-            const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ content: editValue }),
-            });
-            if (res.ok) {
-                setEditingId(null);
-                toastRef.current?.show({
-                    severity: "success",
-                    summary: "게시글 수정 완료",
-                    detail: "게시글 수정완료 되었습니다.",
-                    life: 1500,
-                });
-                await refreshComments();
-            }
-        } finally {
-            setIsEditSubmitting(false);
-        }
-    };
-
-    const deleteComment = async (commentId) => {
-        if (deletingIds.has(commentId)) return;
-        setDeletingIds((prev) => new Set(prev).add(commentId));
-
-        try {
-            const res = await fetch(`http://localhost:4100/comments/${commentId}`, {
-                method: "DELETE",
-            });
-            if (res.ok) await refreshComments();
-        } finally {
-            setDeletingIds((prev) => {
-                const next = new Set(prev);
-                next.delete(commentId);
-                return next;
-            });
-        }
-    };
-
-    const deleteBoard = async (boardId) => {
-        if (isDeletingBoard) return;
-        setIsDeletingBoard(true);
-        setDeleteError(null);
-        try {
-            const res = await fetch(`http://localhost:4100/posts/${boardId}`, {
-                method: "DELETE",
-            });
-            if (res.ok) {
-                navigate("/", { replace: true });
-            } else {
-                setDeleteError("삭제에 실패했습니다. 다시 시도해주세요")
-            }
-        } catch (e) {
-                setDeleteError("네트워크 오류로 삭제하지 못했습니다. 다시 시도해주세요.");
-        } finally {
-            setIsDeletingBoard(false);
-        }
-    };
 
     if (boardLoading) return <ArticleSkeleton />;
 
@@ -394,7 +226,7 @@ export default function PostDetail() {
                     </ul>
                 )}
 
-                <form className="comment-form field" onSubmit={createReply}>
+                <form className="comment-form field" onSubmit={handleCreateReply}>
                     <label className="field-label" htmlFor="comment">
                         댓글 작성
                     </label>

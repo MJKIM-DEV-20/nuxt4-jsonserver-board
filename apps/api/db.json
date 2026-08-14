@@ -185,7 +185,14 @@
       "title": "글 수정",
       "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
       "content": "ㅇㅇㅇ",
-      "views": 2
+      "views": 7
+    },
+    {
+      "id": "0e4e",
+      "title": "작성",
+      "author": "닞네임 테스트",
+      "content": "나님ㄹㅇㅇㄺㅎㄱㄷㅎㄱㅎㄱㅎㄱㅀㅇ",
+      "views": null
     }
   ],
   "comments": [
@@ -287,6 +294,34 @@
       "author": "보",
       "content": "확인했습니다",
       "createdAt": "2026-08-14T03:37:10.026Z"
+    },
+    {
+      "id": "24e3",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㄹㅇㄹㄹ",
+      "createdAt": "2026-08-14T04:00:05.477Z"
+    },
+    {
+      "id": "bbaa",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㄹㄹ",
+      "createdAt": "2026-08-14T04:00:13.560Z"
+    },
+    {
+      "id": "9c7a",
+      "postId": "35b0",
+      "author": "보",
+      "content": "ㅎㅎㅎ",
+      "createdAt": "2026-08-14T04:00:19.396Z"
+    },
+    {
+      "id": "dd20",
+      "postId": "35b0",
+      "author": "보",
+      "content": "작성 테스ㅡㅌㅊ",
+      "createdAt": "2026-08-14T04:05:50.739Z"
     }
   ]
 }
