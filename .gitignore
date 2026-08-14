@@ -31,7 +31,7 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
-*.env
+
 # nyc test coverage
 .nyc_output
 
@@ -82,7 +82,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-apps/web/.env
+.env
 .env.development.local
 .env.test.local
 .env.production.local
