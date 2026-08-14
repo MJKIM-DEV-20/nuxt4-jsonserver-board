@@ -47,7 +47,7 @@ export async function fetchAllPosts({ notice, sort }) {
 
 export async function getPostList({ page, perPage, query, notice, sort }) {
     let data = await fetchAllPosts({ notice, sort });
-        console.log(data)
+        // console.log(data)
     if (query) {
         const q = query.toLowerCase();
         data = data.filter((post) =>

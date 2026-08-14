@@ -68,7 +68,7 @@
       "author": "가나디",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 81,
+      "views": 82,
       "createdAt": "2026-08-01T15:00:00",
       "notice": false
     },
@@ -86,7 +86,7 @@
       "author": "작성자",
       "title": "게시판 제목",
       "content": "게시물 내용",
-      "views": 89,
+      "views": 91,
       "createdAt": "2026-08-09T15:00:00",
       "notice": false
     },
@@ -167,17 +167,17 @@
       "title": "dedasda",
       "author": "asddas",
       "content": "dasdasdas",
-      "views": 7,
+      "views": 9,
       "createdAt": "2026-08-14T01:02:30.420Z",
       "notice": false
     },
     {
       "id": "35b0",
-      "title": "글 수정",
+      "title": "글 수정f",
       "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
-      "content": "ㅇㅇㅇ",
+      "content": "ㅇㅇㅇf",
       "createdAt": "2026-08-14T01:02:30.420Z",
-      "views": 10
+      "views": 12
     },
     {
       "id": "0e4e",
@@ -186,6 +186,15 @@
       "content": "나님ㄹㅇㅇㄺㅎㄱㄷㅎㄱㅎㄱㅎㄱㅀㅇ",
       "createdAt": "2026-08-14T01:02:30.420Z",
       "views": 2
+    },
+    {
+      "id": "4fd8",
+      "title": "ff",
+      "author": "ff",
+      "content": "fff",
+      "views": 1,
+      "createdAt": "2026-08-14T05:38:33.606Z",
+      "notice": false
     }
   ],
   "comments": [
