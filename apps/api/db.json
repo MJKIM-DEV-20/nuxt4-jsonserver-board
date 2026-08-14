@@ -23,7 +23,7 @@
       "author": "게시글 3 닉네임",
       "title": "테스트(게시글 3 수정)",
       "content": "## 게시글 3 ##\n\n# 게시글 3\n# 게시글 3\n## 게시글 3",
-      "views": 20,
+      "views": 22,
       "createdAt": "2025-08-01T15:00:00",
       "notice": false
     },
@@ -149,7 +149,7 @@
       "title": "dd",
       "author": "dd",
       "content": "ddd",
-      "views": 5,
+      "views": 6,
       "createdAt": "2026-08-14T00:46:17.129Z",
       "notice": false
     },
@@ -167,7 +167,7 @@
       "title": "dedasda",
       "author": "asddas",
       "content": "dasdasdas",
-      "views": 9,
+      "views": 12,
       "createdAt": "2026-08-14T01:02:30.420Z",
       "notice": false
     },
@@ -177,23 +177,34 @@
       "author": "ㅁㅇㄴㄴㅇㅁㅁㄴㅇ",
       "content": "ㅇㅇㅇf",
       "createdAt": "2026-08-14T01:02:30.420Z",
-      "views": 12
+      "views": 15,
+      "notice": false
     },
     {
       "id": "0e4e",
-      "title": "작성",
-      "author": "닞네임 테스트",
-      "content": "나님ㄹㅇㅇㄺㅎㄱㄷㅎㄱㅎㄱㅎㄱㅀㅇ",
+      "title": "공지",
+      "author": "관리자 테스트",
+      "content": "공지 테스트",
       "createdAt": "2026-08-14T01:02:30.420Z",
-      "views": 2
+      "views": 7,
+      "notice": true
     },
     {
       "id": "4fd8",
       "title": "ff",
       "author": "ff",
       "content": "fff",
-      "views": 1,
+      "views": 6,
       "createdAt": "2026-08-14T05:38:33.606Z",
+      "notice": false
+    },
+    {
+      "id": "eea3",
+      "title": "테스ㅡㅌ",
+      "author": "ㅈㅂ낭마",
+      "content": "ㄴㅇㅁㅁㄴㅇㅁㄴ",
+      "views": 3,
+      "createdAt": "2026-08-14T05:44:57.263Z",
       "notice": false
     }
   ],
@@ -289,20 +300,6 @@
       "author": "보",
       "content": "확인했습니다",
       "createdAt": "2026-08-14T03:37:10.026Z"
-    },
-    {
-      "id": "24e3",
-      "postId": "35b0",
-      "author": "보",
-      "content": "ㄹㅇㄹㄹ",
-      "createdAt": "2026-08-14T04:00:05.477Z"
-    },
-    {
-      "id": "bbaa",
-      "postId": "35b0",
-      "author": "보",
-      "content": "ㄹㄹ",
-      "createdAt": "2026-08-14T04:00:13.560Z"
     },
     {
       "id": "9c7a",

@@ -24,7 +24,6 @@ export function usePost(id) {
                 setBoard({ ...data, views: data.views + 1 });
             } catch (e) {
                 if (ignore) return;
-                // client.js에서 404도 !res.ok로 잡히므로 메시지로 구분
                 setBoardError(
                     e.message?.includes("404")
                         ? "존재하지 않는 게시글입니다."

@@ -4,7 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import React, { useState } from "react";
 import { useRef, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { ContentState } from "./ContentState";
 import { Toast } from "primereact/toast";
 
@@ -79,8 +79,10 @@ export default function PostsForm({ initialData, onSubmit, onCancel ,submitError
   return (
       <>
       <span className="back-link is-static">
-        <i className="pi pi-chevron-left" aria-hidden="true" />
-        전체 글로
+          <NavLink to={"/"} className="Nav">
+          <i className="pi pi-chevron-left" aria-hidden="true" />
+          전체 글로
+        </NavLink>
       </span>
 
         <section className="page-intro page-intro--compact">

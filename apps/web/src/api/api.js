@@ -121,8 +121,6 @@ export function incrementView(id, currentViews) {
 
 
 
-
-
 // export function createPost({ title, author, content }) {
 //     return request("/posts", {
 //         method: "POST",
